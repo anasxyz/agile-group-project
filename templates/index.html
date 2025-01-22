@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask WebSocket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Flask WebSocket Example</h1>
+    <div id="messages"></div>
+    <input type="text" id="message_input" placeholder="Type a message">
+    <button onclick="sendMessage()">Send Message</button>
+
+    <script>
+        // Connect to the current WebSocket server
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Handle incoming messages
+        socket.on('message', function(msg) {
+            var messagesDiv = document.getElementById('messages');
+            var newMessage = document.createElement('p');
+            // newMessage.innerText = 'Received: ' + msg.text;
+            messagesDiv.appendChild(newMessage);
+        });
+
+        // Function to send messages
+        function sendMessage() {
+            var input = document.getElementById('message_input');
+            var message = input.value;
+            var jsonMessage = JSON.stringify({ text: message });  // Wrap the message in a JSON object
+
+            // Send the JSON message to the server
+            socket.send(jsonMessage);
+            input.value = '';  // Clear the input field
+        }
+    </script>
+</body>
+</html>

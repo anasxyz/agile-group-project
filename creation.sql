@@ -4,9 +4,7 @@ CREATE DATABASE `Bank`;
 
 USE `Bank`;
 
--- Dump of table Accounts
--- ------------------------------------------------------------
-
+-- Create Accounts Table
 DROP TABLE IF EXISTS `Accounts`;
 
 CREATE TABLE `Accounts` (
@@ -16,30 +14,7 @@ CREATE TABLE `Accounts` (
   PRIMARY KEY (`CardNumber`)      
 );
 
-LOCK TABLES `Accounts` WRITE;
-
-DROP TABLE IF EXISTS `Transactions`;
-
-CREATE TABLE `Transactions` (
-  `TransactionId` INT AUTO_INCREMENT PRIMARY KEY, 
-  `CardNumber` CHAR(16) NOT NULL,                 -- Foreign key to reference Accounts
-  `Date` DATE DEFAULT NULL,                    
-  `PreBalance` DECIMAL(15, 2) DEFAULT NULL,       -- Balance before the transaction
-  `NewBalance` DECIMAL(15, 2) DEFAULT NULL,       -- Balance after the transaction
-  FOREIGN KEY (`CardNumber`) REFERENCES `Accounts`(`CardNumber`) 
-  );
-
-CREATE TABLE `NetworKSwitchLogs` (
-  `SwitchId` INT AUTO_INCREMENT PRIMARY KEY, 
-  `CardNumber` CHAR(16) NOT NULL,                 -- Foreign key to reference Accounts
-  `Date` DATE DEFAULT NULL,                      
-  `Balance` DECIMAL(15, 2) DEFAULT NULL,       -- Current Balance
-  `Destination` CHAR(16) NOT NULL,		-- Direction, either NETWORK or ATM
-  FOREIGN KEY (`CardNumber`) REFERENCES `Accounts`(`CardNumber`) 
-);
-
-LOCK TABLES `Accounts` WRITE;
-
+-- Insert Data into Accounts Table
 INSERT INTO `Accounts` (`CardNumber`, `PIN`, `Balance`)
 VALUES
   ('1234567812345678', '1234', 600.00),
@@ -49,4 +24,26 @@ VALUES
   ('1111111111111111', '1111', 456.00),
   ('1258125812581258', '1258', 2222.00);
 
-UNLOCK TABLES;
+-- Create Transactions Table
+DROP TABLE IF EXISTS `Transactions`;
+
+CREATE TABLE `Transactions` (
+  `TransactionId` INT AUTO_INCREMENT PRIMARY KEY, 
+  `CardNumber` CHAR(16) NOT NULL,                 
+  `Date` DATE DEFAULT NULL,                    
+  `PreBalance` DECIMAL(15, 2) DEFAULT NULL,      
+  `NewBalance` DECIMAL(15, 2) DEFAULT NULL,      
+  FOREIGN KEY (`CardNumber`) REFERENCES `Accounts`(`CardNumber`) 
+);
+
+-- Create NetworkSwitchLogs Table
+DROP TABLE IF EXISTS `NetworKSwitchLogs`;
+
+CREATE TABLE `NetworKSwitchLogs` (
+  `SwitchId` INT AUTO_INCREMENT PRIMARY KEY, 
+  `CardNumber` CHAR(16) NOT NULL,                 
+  `Date` DATE DEFAULT NULL,                      
+  `Balance` DECIMAL(15, 2) DEFAULT NULL,       
+  `Destination` CHAR(16) NOT NULL,		
+  FOREIGN KEY (`CardNumber`) REFERENCES `Accounts`(`CardNumber`) 
+);

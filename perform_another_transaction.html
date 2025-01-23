@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Another Transaction</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="main-title">Perform Another Transaction</h1>
+        <h2 class="sub-title">Would you like to perform another transaction?</h2>
+        <div class="card-container">
+            <button type="button" class="large-button" onclick="window.location.href='card.html'">YES</button>
+            <button type="button" class="large-button">NO</button>
+        </div>
+    </div>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 800px;
+            padding: 20px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            background-color: #ffffff;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .large-button {
+            width: 30%;
+            padding: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #ffffff;
+            border: 2px solid #000;
+            border-radius: 5px;
+        }
+
+        .large-button:hover {
+            background-color: #d9d9d9;
+        }
+    </style>
+
+</body>
+
+</html>

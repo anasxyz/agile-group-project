@@ -4,26 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIEW BALAMCE</title>
+    <title>VIEW BALANCE</title>
 </head>
 
 <body>
+
+    <div class="ncr-bank">NCR BANK</div>
+
     <div class="container">
         <h1>How would you like your balance?</h1>
-        <div class="card-container">
-            <div class="card">
-                <button type="button" class="large-button" onclick="window.location.href='/view_balance'">VIEW
-                    BALANCE</button>
-            </div>
-            <div class="card">
-                <button type="button" class="large-button" onclick="window.location.href='/print_balance'">PRINT
-                    BALANCE</button>
-            </div>
+        <div class="button-container">
+            <button type="button" class="large-button" onclick="window.location.href='balance_summary.html'">VIEW
+                BALANCE</button>
+            <button type="button" class="large-button" onclick="window.location.href='balance_summary.html'">PRINT
+                BALANCE</button>
         </div>
-        <div class="button-container"></div>
-        <button type="button" class="small-button" onclick="window.location.href='/main'">MAIN</button>
-        <button type="button" class="small-button" onclick="window.close()">EXIT</button>
-    </div>
+        <div class="small-button-container">
+            <button type="button" class="small-button" onclick="window.location.href='transaction.html'">MENU</button>
+            <button type="button" class="small-button" onclick="window.close()">EXIT</button>
+        </div>
     </div>
 
     <style>
@@ -37,67 +36,69 @@
         }
 
         .container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.4);
             text-align: center;
-            width: 60%;
-        }
-
-        .card-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .card {
-            background-color: #ffffff;
+            width: 800px;
             padding: 20px;
+            border: 10px solid #000;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            width: 45%;
-            text-align: center;
+            background-color: #ffffff;
+            box-shadow: 0 14px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
         }
 
         .button-container {
-            margin-top: 20px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .large-button {
-            width: 45%;
             padding: 20px;
-            margin: 10px 0;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
-            background-color: #76adae;
-            color: white;
-            border: none;
+            background-color: #ffffff;
+            border: 2px solid #000;
             border-radius: 5px;
-            box-sizing: border-box;
+            box-shadow: 0 14px 50px rgba(0, 0, 0, 0.4);
         }
 
         .large-button:hover {
-            background-color: #0056b3;
+            background-color: #d9d9d9;
+        }
+
+        .small-button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
         .small-button {
-            width: 30%;
+            width: 48%;
             padding: 10px;
-            margin: 10px 0;
             font-size: 14px;
             cursor: pointer;
-            background-color: #76adae;
-            color: white;
-            border: none;
+            background-color: #ffffff;
+            border: 2px solid #000;
             border-radius: 5px;
-            box-sizing: border-box;
         }
 
         .small-button:hover {
-            background-color: #0056b3;
+            background-color: #d9d9d9;
+        }
+
+        .ncr-bank {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            color: #000;
         }
     </style>
 </body>

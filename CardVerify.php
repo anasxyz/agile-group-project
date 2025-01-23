@@ -1,41 +1,37 @@
 <?php
 session_start();  // Start the session to access session variables
 
+$dbhost     = "databaseatm.cv6mcgeknvyl.us-east-1.rds.amazonaws.com";
+$dbport     = "3306";
+$dbname     = "Bank";
+$dbuser     = "admin";
+$dbpass     = "databaseatm12";
 
-
-// Array of test cards that will be successful
-$testCards = [
-    '12',
-    '58',
-    '91',
-    '23',
-    '55'
-];
-
-// Function to verify if the entered card is in the list of test cards
-function verifyCard($enteredCard) {
-    global $testCards;
-    foreach ($testCards as $card) {
-        if ($enteredCard === $card) {
-            $_SESSION['CardNumber'] = $enteredCard;
-            return true;
-        }
-    }
-    return false;
+try {
+    // database connection
+    $conn = new PDO("mysql:host=$dbhost;port=$dbport;dbname=$dbname", $dbuser, $dbpass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
 
 if (isset($_POST['Card'])) {
     $enteredCard = $_POST['Card'];
-    if (verifyCard($enteredCard)) {
-        echo '<script>alert(card verified);</script>';
-        header ("Location: PinEntry.php");
-        
+    // Query to check card number
+    $query = "SELECT CardNumber FROM Accounts WHERE CardNumber = :cardNumber";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':cardNumber', $enteredCard);
+    $stmt->execute();
+
+    // Check if any rows are returned
+    if ($stmt->rowCount() > 0) {
+        $_SESSION['CardNumber'] = $enteredCard;
+        header("Location: PinEntry.php");
+        exit();
     } else {
-        $_SESSION['error_message'] = 'Invalid card';
-        header ("Location: CardEntry.php");
+        $_SESSION['error_message'] = 'Card not found';
+        header("Location: CardEntry.php");
+        exit();
     }
 }
-
-
-
 ?>

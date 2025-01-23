@@ -66,7 +66,7 @@
             ?>
             <form method="post" action="CardVerify.php">
                 <label for="card">Enter Card:</label>
-                <input type="password" id="card" name="Card" maxlength="2" readonly>
+                <input type="password" id="card" name="Card" maxlength="16" readonly>
             </form>
         </div>
     </div>
@@ -89,7 +89,7 @@
             if (i === 10) {
                 button.textContent = 0;
                 button.addEventListener('click', function() {
-                if (cardInput.value.length < 4) {
+                if (cardInput.value.length < 16) {
                     cardInput.value += 0;
                 }
                 });
@@ -108,7 +108,7 @@
                 else {
                 button.textContent = i+1; }
             button.addEventListener('click', function() {
-            if (cardInput.value.length < 4) {
+            if (cardInput.value.length < 16) {
                 cardInput.value += i+1;
             }
             });

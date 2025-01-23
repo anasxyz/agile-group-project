@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIEW BALAMCE</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>How would you like your balance?</h1>
+        <div class="card-container">
+            <div class="card">
+                <button type="button" class="large-button" onclick="window.location.href='/view_balance'">VIEW
+                    BALANCE</button>
+            </div>
+            <div class="card">
+                <button type="button" class="large-button" onclick="window.location.href='/print_balance'">PRINT
+                    BALANCE</button>
+            </div>
+        </div>
+        <div class="button-container"></div>
+        <button type="button" class="small-button" onclick="window.location.href='/main'">MAIN</button>
+        <button type="button" class="small-button" onclick="window.close()">EXIT</button>
+    </div>
+    </div>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 60%;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 45%;
+            text-align: center;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .large-button {
+            width: 45%;
+            padding: 20px;
+            margin: 10px 0;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #76adae;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .large-button:hover {
+            background-color: #0056b3;
+        }
+
+        .small-button {
+            width: 30%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #76adae;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .small-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</body>
+
+</html>

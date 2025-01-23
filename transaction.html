@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANSACTION TYPE MENU</title>
+</head>
+
+<body>
+    <div class="transaction-options">
+        <button onclick="selectTransaction('cashwithdraw')">Balance Inquiry</button>
+        <button onclick="selectTransaction('checkbalance')">Cash Withdrawal</button>
+        <button onclick="selectTransaction('deposits')">Deposits</button>
+        <button onclick="selectTransaction('payments')">Payments</button>
+        <button onclick="selectTransaction('payments')">Mixed Deposit</button>
+        <button onclick="selectTransaction('payments')">Cash a Check</button>
+        <button onclick="selectTransaction('payments')">Check Deposit with CashBack</button>
+        <button onclick="exit()">Exit</button>
+    </div>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .transaction-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .transaction-options button {
+            padding: 20px;
+            width: 800px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function selectTransaction(type) {
+            alert('You selected: ' + type);
+        }
+
+        function exit() {
+            alert('Exiting...');
+        }
+    </script>
+</body>
+
+</html>

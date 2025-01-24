@@ -78,9 +78,8 @@ session_start(); // Ensure session is started to use session variables
         transform: none;
     }
 
-    /* Modal Styles */
     .modal {
-      display: none; /* Hidden by default */
+      display: none;
       position: fixed;
       z-index: 1;
       left: 0;
@@ -97,6 +96,7 @@ session_start(); // Ensure session is started to use session variables
       border: 1px solid #888;
       width: 80%;
       text-align: center;
+      border-radius: 25px;
     }
 
     .close {
@@ -122,6 +122,7 @@ session_start(); // Ensure session is started to use session variables
       border: none;
       cursor: pointer;
       margin: 0 10px;
+      border-radius: 25px;
     }
 
     .modal-button:hover {
@@ -133,28 +134,23 @@ session_start(); // Ensure session is started to use session variables
   <div class="container">
     <h1>Select a Transaction</h1>
 
-    <!-- Checking -->
-    <div class="option" onclick="showModal('Checking', 'You selected the Checking account. Would you like to proceed?', 'Yes', 'Cancel', 'redirectToPinEntry()', 'closeModal()')">
+    <div class="option" onclick="sendTransactionData('balance inquiry')">
       <span>Checking</span>
     </div>
 
-    <!-- Savings -->
-    <div class="option" onclick="redirect()">
+    <div class="option" onclick="sendTransactionData('balance inquiry')">
       <span>Savings</span>
     </div>
-
-    <!-- Credit -->
-    <div class="option" onclick="">
+   
+    <div class="option" onclick="sendTransactionData('balance inquiry')">
       <span>Credit</span>
     </div>
-
-    <!-- Loan -->
-    <div class="option" onclick="">
+  
+    <div class="option" onclick="sendTransactionData('balance inquiry')">
       <span>Loan</span>
     </div>
   </div>
 
-  <!-- Modal -->
   <div id="customModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -169,27 +165,50 @@ session_start(); // Ensure session is started to use session variables
 
   <script>
     function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-      // Set the title, message, and button text
       document.getElementById('modalTitle').textContent = title;
       document.getElementById('modalMessage').textContent = message;
       document.getElementById('button1').textContent = button1Text;
       document.getElementById('button2').textContent = button2Text;
 
-      // Set the button actions
       document.getElementById('button1').setAttribute('onclick', button1Action);
       document.getElementById('button2').setAttribute('onclick', button2Action);
 
-      // Show the modal
       document.getElementById('customModal').style.display = 'block';
     }
 
     function closeModal() {
-      // Close the modal
       document.getElementById('customModal').style.display = 'none';
     }
 
+    function sendTransactionData(transaction_type) {
+      const transaction_data = {
+        card_number: "<?php echo $_SESSION['card_number']; ?>",
+        expiry_date: '12/25',
+        atm_id: 'ATM001',
+        transaction_id: 'txn_' + Math.random().toString(36).substr(2, 9),
+        pin: "<?php echo $_SESSION['pin']; ?>",
+        transaction_type: transaction_type
+      };
+
+      fetch('http://localhost/transaction_switch.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(transaction_data).toString()
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log(data);
+        showModal('Transaction Successful', data, 'Close', '', 'closeModal()', '');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showModal('Error', 'There was an error processing your request.', 'Close', '', 'closeModal()', '');
+      });
+    }
+
     function redirect() {
-      
     }
   </script>
 </body>

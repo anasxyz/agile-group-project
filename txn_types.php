@@ -78,6 +78,57 @@ session_start(); // Start the session
         transform: none;
     }
 
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      text-align: center;
+      border-radius: 30px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal-footer {
+      margin-top: 20px;
+    }
+
+    .modal-button {
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px;
+      border-radius: 30px;
+    }
+
+    .modal-button:hover {
+      background-color: #ddd;
+    }
+
   </style>
 </head>
 <body>
@@ -93,57 +144,89 @@ session_start(); // Start the session
     </form>
 
     <!-- Cash Withdrawal -->
-    <form id="redirectForm" method="POST" action="pin_entry.php">
-      <div class="option" onclick="redirect()">
-      <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="Balance Inquiry">
+    <form id="redirectForm" method="POST" action="withdrawal_options.php">
+      <div class="option" onclick="showModal('Acknowledgement', 'You may be charged a fee for this transaction. Do you wish to continue?', 'Decline', 'Accept', 'closeModal()', 'redirectWithdrawal()')">
+      <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
         <span>Cash Withdrawal</span>
       </div>
     </form>
 
     <!-- Deposits (Inactive) -->
-    <form method="POST" action="pin_entry.php">
+    <form method="POST" action="">
       <div class="option inactive" onclick="">
-      <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="Balance Inquiry">
+      <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
         <span>Deposits</span>
       </div>
     </form>
 
     <!-- Payments (Inactive) -->
-    <form method="POST" action="pin_entry.php">
+    <form method="POST" action="">
       <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/ios/50/cash-in-hand.png" alt="Balance Inquiry">
+        <img src="https://img.icons8.com/ios/50/cash-in-hand.png" alt="">
         <span>Payments</span>
       </div>
     </form>
 
     <!-- Mixed Deposits (Inactive) -->
-    <form method="POST" action="pin_entry.php">
+    <form method="POST" action="">
       <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/pulsar-line/100/cash.png" alt="Balance Inquiry">
+        <img src="https://img.icons8.com/pulsar-line/100/cash.png" alt="">
         <span>Mixed Deposits</span>
       </div>
     </form>
 
     <!-- Cash a Check (Inactive) -->
-    <form method="POST" action="pin_entry.php">
+    <form method="POST" action="">
       <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/pulsar-line/100/check.png" alt="Balance Inquiry">
+        <img src="https://img.icons8.com/pulsar-line/100/check.png" alt="">
         <span>Cash a Check</span>
       </div>
     </form>
 
     <!-- Check Deposit With CashBack (Inactive) -->
-    <form method="POST" action="pin_entry.php">
+    <form method="POST" action="">
       <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/wired/64/cash-in-hand.png" alt="Balance Inquiry">
+        <img src="https://img.icons8.com/wired/64/cash-in-hand.png" alt="">
         <span>Check Deposit With CashBack</span>
       </div>
     </form>
   </div>
 
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle">Default Title</h2>
+      <p id="modalMessage">Default message goes here.</p>
+      <div class="modal-footer">
+        <button id="button1" class="modal-button" onclick="">Button 1</button>
+        <button id="button2" class="modal-button" onclick="">Button 2</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMessage').textContent = message;
+      document.getElementById('button1').textContent = button1Text;
+      document.getElementById('button2').textContent = button2Text;
+
+      document.getElementById('button1').setAttribute('onclick', button1Action);
+      document.getElementById('button2').setAttribute('onclick', button2Action);
+
+      document.getElementById('customModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('customModal').style.display = 'none';
+    }
+
     function redirect() {
       document.getElementById("redirectForm").submit();
+    }
+
+    function redirectWithdrawal() {
+      window.location.href = "withdrawal_options.php";
     }
   </script>
 </body>

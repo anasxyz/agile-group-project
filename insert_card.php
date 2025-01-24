@@ -242,15 +242,16 @@ session_start();
                             const cardNumber = `${document.getElementById("cardNumber1").innerText}${document.getElementById("cardNumber2").innerText}${document.getElementById("cardNumber3").innerText}${document.getElementById("cardNumber4").innerText}`;
                             const expiry = document.getElementById("expiry").innerText;
 
-                            // Create an AJAX request to send data to the server
-                            const xhr = new XMLHttpRequest();
-                            xhr.open("POST", "save_card_data.php", true);
-                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                            xhr.send(`card_number=${cardNumber}&expiry=${expiry}&pin=${input.value}`);
+                            // // Create an AJAX request to send data to the server
+                            // const xhr = new XMLHttpRequest();
+                            // xhr.open("POST", "save_card_data.php", true);
+                            // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                            // xhr.send(`card_number=${cardNumber}&expiry=${expiry}&pin=${input.value}`);
 
+                            const url = `save_card_data.php?card_number=${encodeURIComponent(cardNumber)}&expiry=${encodeURIComponent(expiry)}&pin=${encodeURIComponent(input.value)}`;
+                            window.location.href = url;
 
                             input.value = ""; // Clear PIN after submission
-                            window.location.href = 'txn_types.php'; // Redirect after valid PIN
                         } else {
                             alert("Please enter a 4-digit PIN.");
                         }

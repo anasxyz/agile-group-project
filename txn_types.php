@@ -204,30 +204,8 @@ session_start(); // Start the session
     </div>
   </div>
 
-  <script>
-    function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-      document.getElementById('modalTitle').textContent = title;
-      document.getElementById('modalMessage').textContent = message;
-      document.getElementById('button1').textContent = button1Text;
-      document.getElementById('button2').textContent = button2Text;
-
-      document.getElementById('button1').setAttribute('onclick', button1Action);
-      document.getElementById('button2').setAttribute('onclick', button2Action);
-
-      document.getElementById('customModal').style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('customModal').style.display = 'none';
-    }
-
-    function redirect() {
-      document.getElementById("redirectForm").submit();
-    }
-
-    function redirectWithdrawal() {
-      window.location.href = "withdrawal_options.php";
-    }
+  <script src="modal.js">
+    
   </script>
 </body>
 </html>

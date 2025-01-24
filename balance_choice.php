@@ -107,15 +107,15 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
     function sendTransactionData(transaction_type) {
       const transaction_data = {
-        card_number: '1234123412341234',
-        expiry_date: '12/25',
-        atm_id: 'ATM001',
-        transaction_id: 'txn_' + Math.random().toString(36).substr(2, 9),
-        pin: '1234',
-        transaction_type: transaction_type
+        'card_number': '1234123412341234',
+        'expiry_date': '12/25',
+        'atm_id': 'ATM001',
+        'transaction_id': 'txn_random',
+        'pin': '1234',
+        'transaction_type': 'balance inquiry'
       };
 
-      fetch('http://localhost/transaction_switch.php', {
+      fetch('http://transactionswitch.us-east-1.elasticbeanstalk.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -135,6 +135,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       })
       .catch(error => {
         console.error('Error:', error);
+        console.log(data);
         showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
       });
     }

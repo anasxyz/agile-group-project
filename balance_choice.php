@@ -9,7 +9,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balance Summary</title>
+  <title>Balance Choice</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Modal Styles */
@@ -102,7 +102,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         } else if (option === 'print') {
           window.location.href = 'print_receipt.php';
         }
-      }, 5000); // 5000ms = 5 seconds
+      }, 2000); // 5000ms = 5 seconds
     }
 
     function sendTransactionData(transaction_type) {

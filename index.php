@@ -1,9 +1,15 @@
+<?php
+unset($_SESSION['card_number']);
+unset($_SESSION['expiry']);
+unset($_SESSION['pin']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Interaction UI</title>
+  <title>ATM</title>
   <style>
     body {
       margin: 0;

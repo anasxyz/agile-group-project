@@ -153,19 +153,13 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 </head>
 <body>
   <div class="container">
-    <h1>Balance Summary</h1>
-
-    <?php
-        echo "<h3>FROM: " . $accountType . "</h3>";
-    ?>
+    <h1>Thank you</h1>
 
     <div class="balance-info">
-      <p>Available Balance: <strong>$1,111.11</strong></p>
-      <p>Current Balance: <strong>$2,222.22</strong></p>
-      <p>Account Balance: <strong>$3,333.33</strong></p>
+      <p>Thank you for banking with NCR Atleos Bank</p>
     </div>
 
-    <div class="option" onclick="perform_another_transaction()">
+    <div class="option" onclick="redirectIndex()">
       <span>Done</span>
     </div>
   </div>

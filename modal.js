@@ -63,3 +63,23 @@ function showModal(title, message, button1Text, button2Text, button1Action, butt
   function redirectWithdrawal() {
     window.location.href = "withdrawal_options.php";
   }
+
+  function perform_another_transaction() {
+    showModal("Perform Another Transaction?", "Would you like to do another transaction?", "NO", "YES", "redirectCardOut()", "redirectInsertCard()")
+  }
+
+  function redirectCardOut() {
+    window.location.href = 'take_card_out.php';
+  }
+
+  function redirectInsertCard() {
+    window.location.href = 'insert_card.php';
+  }
+
+  function transaction_cancelled() {
+    showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Okay", "", "redirectCardOut()", "");
+  }
+
+  function redirectIndex() {
+    window.location.href = 'index.php';
+  }

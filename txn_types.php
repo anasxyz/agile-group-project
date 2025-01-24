@@ -129,6 +129,25 @@ session_start(); // Start the session
       background-color: #ddd;
     }
 
+    .exit-btn-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px; /* Add some space below the grid */
+    }
+
+    .exit-btn {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color:rgb(243, 187, 183);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .exit-btn:hover {
+      background-color:rgb(250, 157, 157);
+    }
+
   </style>
 </head>
 <body>
@@ -190,7 +209,14 @@ session_start(); // Start the session
         <span>Check Deposit With CashBack</span>
       </div>
     </form>
+
+    <div class="option exit-btn" onclick="transaction_cancelled()">
+      <img src="https://img.icons8.com/ios-filled/50/logout-rounded.png" alt="">
+      <span style="padding-top: 10px;">Exit</span>
+    </div>
   </div>
+
+  
 
   <div id="customModal" class="modal">
     <div class="modal-content">

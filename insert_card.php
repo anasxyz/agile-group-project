@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+// Clear all session values related to card information
+unset($_SESSION['card_number']);
+unset($_SESSION['expiry']);
+unset($_SESSION['pin']);
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +13,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card and PIN Entry</title>
+    <title>Insert Card</title>
     <style>
         /* Body Styling */
         body {

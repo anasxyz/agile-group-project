@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Card</title>
+</head>
+
+<body>
+
+    <div class="ncr-bank">NCR BANK</div>
+
+    <div class="debit-card-container" onclick="window.location.href='transaction.html'">
+        <div class="debit-card">
+            <div class="chip"></div>
+            <div class="card-number">1234 5678 9012 3456</div>
+            <div class="card-holder">AGILE GROUP TWO</div>
+            <div class="bank-logo">NCR Bank</div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .ncr-bank {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .debit-card-container {
+            width: 800px;
+            height: 250px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            cursor: pointer;
+        }
+
+        .debit-card {
+            width: 90%;
+            max-width: 400px;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .debit-card:hover {
+            transform: scale(1.8);
+            box-shadow: 0 0 30px 10px rgba(30, 60, 120, 0.8), 0 0 60px 20px rgba(42, 82, 152, 0.6);
+        }
+
+        .debit-card .chip {
+            width: 50px;
+            height: 35px;
+            background: radial-gradient(circle, gold, #d4af37);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            align-self: flex-start;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .debit-card .card-number {
+            font-size: 2rem;
+            letter-spacing: 3px;
+            margin-top: 10px;
+        }
+
+        .debit-card .card-holder {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        .debit-card .bank-logo {
+            align-self: flex-end;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+
+</body>
+
+</html>

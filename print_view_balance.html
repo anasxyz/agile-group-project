@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIEW BALAnCE</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>How would you like your balance?</h1>
+        <div class="card-container">
+            <div class="card">
+                <button type="button" class="large-button" onclick="sendData('process_request.php', 'view_balance')">VIEW BALANCE</button>
+            </div>
+            <div class="card">
+                <button type="button" class="large-button" onclick="sendData('process_request.php', 'print_balance')">PRINT BALANCE</button>
+            </div>
+        </div>
+        <div class="button-container"></div>
+        <button type="button" class="small-button" onclick="window.location.href='/main'">MAIN</button>
+        <button type="button" class="small-button" onclick="window.close()">EXIT</button>
+    </div>
+    </div>
+
+    <script>
+        function handleIncomingData(data) {
+            console.log("Received data:", data); // Log the received data
+            if (data.Status === "approved") {
+                if (data.TransactionType === "View Balance") {
+                    document.body.innerHTML = `<h1>Your Account Balance</h1><p>${data.AccountBalance}</p>`;
+                } else if (data.TransactionType === "Print Balance") {
+                    console.log("Attempting to open receipt popup for Print Balance"); // Log before opening popup
+                    const transactionTime = new Date().toLocaleString();
+                    const receiptWindow = window.open("", "Receipt", "width=300,height=400");
+                    if (receiptWindow) {
+                        receiptWindow.document.write(`
+                            <html>
+                            <head><title>Receipt</title></head>
+                            <body>
+                                <h1>Transaction Receipt</h1>
+                                <p>Transaction Time: ${transactionTime}</p>
+                                <p>Account Balance: ${data.AccountBalance}</p>
+                                <button onclick="window.print()">Print</button>
+                            </body>
+                            </html>
+                        `);
+                        receiptWindow.document.close(); // Ensure the document is closed to render properly
+                    } else {
+                        console.error("Popup blocked or failed to open");
+                        alert("Popup blocked. Please allow popups for this site.");
+                    }
+                }
+            } else {
+                alert("Transaction not approved.");
+            }
+        }
+
+        function sendData(url, action) {
+            const data = {
+                TransactionID: "",
+                CardNumber: "",
+                ExpiryDate: "",
+                TransactionType: action === 'view_balance' ? "View Balance" : "Print Balance",
+                Action: action
+            };
+
+            fetch('transaction_switch.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Data received from server:", data); // Log the data received from the server
+                handleIncomingData(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        // // Test function to simulate server response
+        // function testHandleIncomingData() {
+        //     const mockData = {
+        //         TransactionID: "12345",
+        //         Status: "approved",
+        //         AccountBalance: "$1000",
+        //         TransactionType: "View Balance" // Change to "Print Balance" to test the other case
+        //     };
+
+        //     console.log("Testing with mock data:", mockData);
+        //     handleIncomingData(mockData);
+        // }
+
+        // Call the test function to simulate receiving data
+        // testHandleIncomingData();
+    </script>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 60%;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 45%;
+            text-align: center;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .large-button {
+            width: 45%;
+            padding: 20px;
+            margin: 10px 0;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #76adae;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .large-button:hover {
+            background-color: #0056b3;
+        }
+
+        .small-button {
+            width: 30%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #76adae;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .small-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</body>
+
+</html>

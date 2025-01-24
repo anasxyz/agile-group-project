@@ -1,0 +1,20 @@
+Test log entry
+Test log entry
+[2025-01-24 02:00:30] Received transaction from ATM: Array
+(
+    [TransactionID] => 
+    [CardNumber] => 
+    [ExpiryDate] => 
+    [TransactionType] => Print Balance
+    [Action] => print_balance
+)
+
+[2025-01-24 02:00:30] Simulated response: Array
+(
+    [TransactionID] => 6792e62eefed8
+    [Status] => approved
+    [AccountBalance] => $1000
+    [TransactionType] => Print Balance
+    [Confirmation] => Data received successfully
+)
+

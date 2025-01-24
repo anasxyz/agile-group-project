@@ -6,11 +6,14 @@ ini_set('display_errors', 1);
 // Log file for transaction switch
 $logFile = 'transaction_switch.log';
 
+// Test log entry
+file_put_contents($logFile, "Test log entry\n", FILE_APPEND);
+
 // Network Simulator URL (replace with the actual URL of the Network Simulator)
 $networkSimulatorUrl = 'http://network-simulator-device/network_simulator.php';
 
 // Flag to enable/disable Network Simulator (set to false for local testing)
-$useNetworkSimulator = true;
+$useNetworkSimulator = false; // Set to false for local testing
 
 // Function to log messages to the log file
 function logMessage($message) {
@@ -52,9 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Simulate a response locally (for testing without Network Simulator)
         $response = [
-            'status' => 'approved', // Simulate approval
-            'transactionId' => uniqid(), // Generate a unique transaction ID
-            'message' => 'Transaction approved successfully'
+            'TransactionID' => uniqid(), // Generate a unique transaction ID
+            'Status' => 'approved', // Simulate approval
+            'AccountBalance' => '$1000', // Simulate an account balance
+            'TransactionType' => $transactionData['TransactionType'], // Echo back the transaction type
+            'Confirmation' => 'Data received successfully' // Add confirmation message
         ];
 
         // Log the simulated response

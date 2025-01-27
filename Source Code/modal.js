@@ -56,6 +56,10 @@ function showModal(title, message, button1Text, button2Text, button1Action, butt
       window.location.href = url;
   }
 
+  function setCurrencyType(currencyType) {
+    sessionStorage.setItem('currencyType', currencyType);
+  }
+
   function redirect() {
     document.getElementById("redirectForm").submit();
   }

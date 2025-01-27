@@ -15,6 +15,8 @@ unset($_SESSION['pin']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insert Card</title>
     <style>
+        @import url('https://fonts.cdnfonts.com/css/credit-card');
+
         /* Body Styling */
         body {
             font-family: Arial, sans-serif;
@@ -40,28 +42,65 @@ unset($_SESSION['pin']);
             position: relative;
             width: 400px;
             height: 250px;
-            background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+            /* background: linear-gradient(135deg,rgb(82, 82, 82),rgb(24, 24, 24)); */
             color: #fff;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
             transition: transform 1s ease-in-out;
+            background-image: url("map.png"); 
+            background-size: contain; /* Ensures the image fits within the element */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-position: center; /* Centers the image */
         }
 
         .card-container .chip {
-            width: 50px;
-            height: 35px;
-            background-color: #fcd34d;
-            border-radius: 5px;
+            width: 60px; /* Adjusted width */
+            height: 45px; /* Adjusted height */
+            background-color: transparent; /* Removed background color */
+            border-radius: 10px;
+            margin-top: 25px;
+            margin-left: 10px;
+            background-image: url("chip2.png"); /* Keep the chip image */
+            background-size: contain; /* Ensures the image fits within the element */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            background-position: center; /* Centers the image */
         }
 
-        .card-container .card-number {
-            font-size: 1.5rem;
+        /* .card-container .card-number {
+            font-family: 'Credit Card', sans-serif;
+            font-size: 1rem;
             letter-spacing: 3px;
             margin: 20px 0;
             display: flex;
             justify-content: space-between;
+            padding: 10px;
+        } */
+
+        .card-container .card-number {
+            font-family: 'Credit Card', monospace; /* Realistic font */
+            font-size: 1rem; /* Slightly larger for readability */
+            letter-spacing: 3px; /* Space between characters */
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            color:rgb(160, 160, 160); /* Metallic grey color */
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+        }
+
+        .date {
+            font-family: 'Credit Card', monospace; /* Realistic font */
+            font-size: 10px; /* Slightly larger for readability */
+            letter-spacing: 3px; /* Space between characters */
+            margin: 20px 0;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            color:rgb(160, 160, 160); /* Metallic grey color */
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
         }
 
         .card-number span {
@@ -79,7 +118,6 @@ unset($_SESSION['pin']);
             justify-content: space-between;
             align-items: center;
             font-size: 0.9rem;
-            margin-top: 10px;
         }
 
         .editable {
@@ -184,6 +222,28 @@ unset($_SESSION['pin']);
         .pin-keyboard-key--enter:hover {
             background-color: #388e3c;
         }
+
+        /* Logo Styling */
+        .card-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            height: 40px;
+            width: auto;
+        }
+
+        .contactless-logo {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 30px;
+            height: 30px;
+            background-image: url('contactless-logo.png'); /* Replace with the actual path to the contactless logo image */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
     </style>
 </head>
 
@@ -191,19 +251,28 @@ unset($_SESSION['pin']);
     <div class="main-container">
         <!-- Credit Card Design Section -->
         <div class="card-container" id="card-container">
+            <div class="contactless-logo">
+            </div>
             <div class="chip"></div>
             <div class="card-number">
-                <span contenteditable="true" class="editable" id="cardNumber1">1234</span>
+                <span contenteditable="true" class="editable" id="cardNumber1">4234</span>
                 <span contenteditable="true" class="editable" id="cardNumber2">5678</span>
                 <span contenteditable="true" class="editable" id="cardNumber3">1234</span>
                 <span contenteditable="true" class="editable" id="cardNumber4">5678</span>
             </div>
             <div class="card-details">
-                <div>
-                    <label for="expiry">Expiry</label>
-                    <div contenteditable="true" id="expiry" class="editable">12/25</div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px; margin-left: 10px;">
+                        <label for="expiry" style="margin: 0;">VALID</label>
+                        <label for="expiry" style="margin: 0;">THRU</label>
+                    </div>
+                    <div contenteditable="true" id="expiry" class="editable date" style="margin-top: 10px;">12/25</div>
                 </div>
             </div>
+
+
+
+            <img src="" alt="Card Logo" class="card-logo" id="cardLogo">
         </div>
 
         <!-- PIN Entry Section -->
@@ -231,9 +300,27 @@ unset($_SESSION['pin']);
         document.addEventListener("DOMContentLoaded", () => {
             const input = document.querySelector(".pin-value");
             const keys = document.querySelectorAll(".pin-keyboard-key");
-            const insertBtn = document.getElementById('insert-btn');
-            
-            let pin = '';
+            const cardNumber1 = document.getElementById("cardNumber1");
+            const cardLogo = document.getElementById("cardLogo");
+
+            const cardLogos = {
+                "4": "visa-logo-2.png", // Replace with actual path to Visa logo
+                "5": "mastercard-logo.png", // Replace with actual path to Mastercard logo
+                "3": "amex-logo.png", // Replace with actual path to Amex logo
+                "6": "discover-logo.png" // Replace with actual path to Discover logo
+            };
+
+            const updateCardLogo = () => {
+                const firstDigit = cardNumber1.innerText.trim()[0];
+                if (cardLogos[firstDigit]) {
+                    cardLogo.src = cardLogos[firstDigit];
+                    cardLogo.style.display = "block";
+                } else {
+                    cardLogo.style.display = "none";
+                }
+            };
+
+            cardNumber1.addEventListener("input", updateCardLogo);
 
             keys.forEach(key => {
                 key.addEventListener("click", () => {
@@ -245,12 +332,6 @@ unset($_SESSION['pin']);
                         if (input.value.length === 4) {
                             const cardNumber = `${document.getElementById("cardNumber1").innerText}${document.getElementById("cardNumber2").innerText}${document.getElementById("cardNumber3").innerText}${document.getElementById("cardNumber4").innerText}`;
                             const expiry = document.getElementById("expiry").innerText;
-
-                            // // Create an AJAX request to send data to the server
-                            // const xhr = new XMLHttpRequest();
-                            // xhr.open("POST", "save_card_data.php", true);
-                            // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                            // xhr.send(`card_number=${cardNumber}&expiry=${expiry}&pin=${input.value}`);
 
                             const url = `save_card_data.php?card_number=${encodeURIComponent(cardNumber)}&expiry=${encodeURIComponent(expiry)}&pin=${encodeURIComponent(input.value)}`;
                             window.location.href = url;
@@ -266,6 +347,8 @@ unset($_SESSION['pin']);
                     }
                 });
             });
+
+            updateCardLogo(); // Initialize logo on page load
         });
     </script>
 </body>

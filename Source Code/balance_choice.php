@@ -115,7 +115,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         'transaction_type': 'balance inquiry'
       };
 
-      fetch('http://transactionswitch.us-east-1.elasticbeanstalk.com', {
+      fetch('http://localhost/transaction_switch.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

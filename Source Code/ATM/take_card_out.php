@@ -55,19 +55,6 @@
       font-size: 1.2em;
       color: #333;
     }
-
-    /* Inactive Button Styling */
-    .option.inactive {
-      background-color: #b0b0b0;
-      color: #7a7a7a;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .option.inactive:hover {
-      background-color: #b0b0b0;
-      transform: none;
-    }
   </style>
 </head>
 <body>
@@ -76,11 +63,24 @@
       <span style="padding-bottom: 20px;">Take Your Card</span>
       <img src="https://img.icons8.com/ios/100/bank-card-back-side--v1.png" alt="">
     </div>
+  </div>
 
-    <script>
-        function take_card_out() {
-            window.location.href = 'thank_you.php'
-        }
-    </script>
+  <script>
+    function take_card_out() {
+      // Get URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const source = urlParams.get('source'); // Retrieve the 'source' parameter
+
+      // Log the source value for debugging
+      console.log('Source parameter:', source);
+
+      // Redirect based on the 'source' value
+      if (source === 'withdrawal_choice.php?account_type=${encodeURIComponent(checking)}') {
+        window.location.href = 'print_reciept.php'; // Go to print receipt
+      } else {
+        window.location.href = 'thank_you.php'; // Default redirect
+      }
+    }
+  </script>
 </body>
 </html>

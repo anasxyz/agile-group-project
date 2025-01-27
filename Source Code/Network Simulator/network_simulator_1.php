@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'transaction_id' => $transaction_data['transaction_id'],
         'status' => 'Approved',
         'transaction_type' => $transaction_data['transaction_type']
-        'message' => 'Approved by network simulator 2'
+        'message' => 'Approved by network simulator 1'
     ];
 
     header('Content-Type: application/json');

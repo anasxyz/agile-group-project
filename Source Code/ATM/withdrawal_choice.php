@@ -136,7 +136,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         'withdrawal_amount': withdrawal_amount
       };
 
-      fetch('http://localhost/test/transaction_switch.php', { //change this later to 'http://localhost/transaction_switch.php'
+      fetch('http://localhost/../Transaction Switch/transaction_switch.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

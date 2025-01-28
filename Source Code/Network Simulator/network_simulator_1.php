@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response = [
         'transaction_id' => $transaction_data['transaction_id'],
         'status' => 'Approved',
-        'transaction_type' => $transaction_data['transaction_type']
+        'transaction_type' => $transaction_data['transaction_type'],
         'message' => 'Approved by network simulator 1'
     ];
 

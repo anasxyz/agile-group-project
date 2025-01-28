@@ -1,17 +1,12 @@
 <?php
-// Allow cross-origin requests from your front-end domain
-header('Access-Control-Allow-Origin: *');  // * allows all origins, replace * with your domain to restrict
-
-// Allow specific HTTP methods (GET, POST, etc.)
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-
-// Allow specific headers (e.g., Content-Type, Authorization)
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $transaction_data = $_POST;
 
-    $url = 'networksim.us-east-1.elasticbeanstalk.com';
+    $url = 'http://localhost/../Network%20Simulator/network_simulator_1.php';
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);

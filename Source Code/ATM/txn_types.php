@@ -4,7 +4,7 @@ session_start();
 $_SESSION['language'] = 'es';
 $language = $_SESSION['language'] ?? 'en';
 
-$lang = include __DIR__ . "/source code/languages/{$language}.php";
+$lang = include "../languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>

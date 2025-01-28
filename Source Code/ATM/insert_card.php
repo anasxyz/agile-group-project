@@ -437,7 +437,7 @@ unset($_SESSION['pin']);
                     const url = `save_card_data.php?card_number=${encodeURIComponent(card_number)}&expiry=${encodeURIComponent(expiry_date)}&pin=${encodeURIComponent(pin)}`;
                     window.location.href = url;
                 } else {
-                    showModal('PIN is wrong', data.message, 'Close', 'Take Out Card', 'closeModal()', 'redirectCardOut()');
+                    showModal('Declined', data.message, 'Close', 'Take Card Out', 'closeModal()', 'redirectCardOut()');
                 }
             })
             .catch(error => {

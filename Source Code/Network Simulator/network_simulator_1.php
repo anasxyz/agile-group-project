@@ -16,14 +16,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bind_param("ss", $card_number, $pin);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+
         if ($result->num_rows > 0) {
-            $response = [
-                'transaction_id' => $transaction_data['transaction_id'],
-                'status' => 'Approved',
-                'transaction_type' => $transaction_data['transaction_type'],
-                'message' => 'Approved by network simulator 1'
-            ];
+            $account = $result->fetch_assoc();
+
+            if ($account['status'] === 'blocked') {
+                $response = [
+                    'transaction_id' => $transaction_data['transaction_id'],
+                    'status' => 'Declined',
+                    'transaction_type' => $transaction_data['transaction_type'],
+                    'message' => 'Transaction declined because your account is blocked'
+                ];
+            } else {
+                $response = [
+                    'transaction_id' => $transaction_data['transaction_id'],
+                    'status' => 'Approved',
+                    'transaction_type' => $transaction_data['transaction_type'],
+                    'message' => 'Approved by network simulator 1'
+                ];
+            }
         } else {
             $response = [
                 'transaction_id' => $transaction_data['transaction_id'],

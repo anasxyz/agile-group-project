@@ -56,8 +56,14 @@ function showModal(title, message, button1Text, button2Text, button1Action, butt
       window.location.href = url;
   }
 
+
   function setCurrencyType(currencyType) {
     sessionStorage.setItem('currencyType', currencyType);
+    if (document.referrer) {
+      window.location.href = document.referrer; // Go back to the referring page
+  } else {
+      window.location.href = "insert_card.php"; // Redirect to homepage if no referrer
+  }
   }
 
   function redirect() {

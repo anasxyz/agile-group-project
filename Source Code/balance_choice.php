@@ -61,7 +61,25 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     <div class="option" onclick="handleOption('print')">
       <span>Print Balance</span>
     </div>
+
+    <div class="option" onclick="redirectToCurrencyOptions()">
+      <span id="currentCurrency">Change Currency <br> Current: £</span>
+    </div>
   </div>
+
+  <script>
+    window.onload = function() {
+            var currencyType = sessionStorage.getItem('currencyType'); // Retrieve session variable
+
+            if (currencyType) {
+                document.getElementById('currentCurrency').innerHTML = "Choose Currency <br> Current: " + currencyType; // Update span with session value
+            } 
+          };
+
+          function redirectToCurrencyOptions() {
+            window.location.href = 'currency_options.php';
+          }
+  </script>
 
   <!-- Modal -->
   <div id="loadingModal" class="modal">

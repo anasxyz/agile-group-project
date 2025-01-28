@@ -1,5 +1,9 @@
 <?php
 session_start(); // Ensure session is started to use session variables
+
+if (!isset($_SESSION['currencyType'])) {
+  $_SESSION['currencyType'] = '£';
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,9 +31,7 @@ session_start(); // Ensure session is started to use session variables
       <span>€</span>
     </div>
   
-    <div class="option" onclick="redirectToBalanceChoice('loan')">
-      <span>Loan</span>
-    </div>
+    
   </div>
 
   <div id="customModal" class="modal">

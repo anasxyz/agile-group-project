@@ -353,7 +353,6 @@ unset($_SESSION['pin']);
         <p id="modalMessage">Default message goes here.</p>
         <div class="modal-footer">
             <button id="button1" class="modal-button" onclick="">Button 1</button>
-            <button id="button2" class="modal-button" onclick="">Button 2</button>
         </div>
         </div>
     </div>
@@ -389,7 +388,7 @@ unset($_SESSION['pin']);
                     const value = key.textContent.trim();
 
                     if (key.classList.contains("pin-keyboard-key--clear")) {
-                        window.location.href = 'insert_card.php'; // Go back to insert card page
+                        transaction_cancelled();
                     } else if (key.classList.contains("pin-keyboard-key--enter")) {
                         if (input.value.length === 4) {
                             const cardNumber = `${document.getElementById("cardNumber1").innerText}${document.getElementById("cardNumber2").innerText}${document.getElementById("cardNumber3").innerText}${document.getElementById("cardNumber4").innerText}`;
@@ -446,14 +445,12 @@ unset($_SESSION['pin']);
             });
             }
 
-            function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
+            function showModal(title, message, button1Text, button1Action) {
                 document.getElementById('modalTitle').textContent = title;
                 document.getElementById('modalMessage').textContent = message;
                 document.getElementById('button1').textContent = button1Text;
-                document.getElementById('button2').textContent = button2Text;
 
                 document.getElementById('button1').setAttribute('onclick', button1Action);
-                document.getElementById('button2').setAttribute('onclick', button2Action);
 
                 document.getElementById('customModal').style.display = 'block';
                 }
@@ -462,9 +459,12 @@ unset($_SESSION['pin']);
                 document.getElementById('customModal').style.display = 'none';
             }
 
-
             function redirectCardOut() {
                 window.location.href = 'take_card_out.php';
+            }
+
+            function transaction_cancelled() {
+                showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Take Card Out", "redirectCardOut()");
             }
     </script>
 </body>

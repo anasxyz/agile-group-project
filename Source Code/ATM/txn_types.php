@@ -225,13 +225,32 @@ session_start(); // Start the session
       <p id="modalMessage">Default message goes here.</p>
       <div class="modal-footer">
         <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
       </div>
     </div>
   </div>
 
-  <script src="modal.js">
-    
+  <script>
+      function transaction_cancelled() {
+        showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Take Card Out", "redirectCardOut()");
+      }
+
+      function showModal(title, message, button1Text, button1Action) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('button1').textContent = button1Text;
+
+        document.getElementById('button1').setAttribute('onclick', button1Action);
+
+        document.getElementById('customModal').style.display = 'block';
+      }
+
+      function closeModal() {
+        document.getElementById('customModal').style.display = 'none';
+      }
+
+      function redirectCardOut() {
+        window.location.href = 'take_card_out.php';
+      }
   </script>
 </body>
 </html>

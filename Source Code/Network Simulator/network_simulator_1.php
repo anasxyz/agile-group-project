@@ -48,15 +48,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->close();
     }
     elseif ($transaction_data['transaction_type'] === 'balance inquiry') {
-        $response = [
-            'transaction_id' => $transaction_data['transaction_id'],
-            'status' => 'Approved',
-            'transaction_type' => $transaction_data['transaction_type'],
-            'message' => 'Approved by network simulator 1'
-        ];
+        $stmt = $conn->prepare("SELECT balance FROM Accounts WHERE cardNumber = ? AND pin = ?");
+        $stmt->bind_param("ss", $card_number, $pin);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $account = $result->fetch_assoc();
+            $balance = $account['balance']; 
+
+            $response = [
+                'transaction_id' => $transaction_data['transaction_id'],
+                'status' => 'Approved',
+                'transaction_type' => $transaction_data['transaction_type'],
+                'balance' => $balance,
+                'message' => 'Approved by network simulator 1'
+            ];
+        } else {
+            $response = [
+                'transaction_id' => $transaction_data['transaction_id'],
+                'status' => 'Declined',
+                'transaction_type' => $transaction_data['transaction_type'],
+                'message' => 'Transaction declined due to incorrect PIN or account not found'
+            ];
+        }
+
+        $stmt->close();
+        $conn->close();
     } 
     elseif ($transaction_data['transaction_type'] === 'withdrawal') {
-        
+        // handle withdrawal logic
     }
 
     header('Content-Type: application/json');

@@ -160,13 +160,13 @@ $lang = include __DIR__ . "/source code/languages/{$language}.php";
 
 <body>
   <div class="container">
-    <h1>Select a Transaction</h1>
+    <h1><?= $lang['select_transaction'] ?></h1>
 
     <!-- Balance Inquiry -->
     <form id="redirectForm" method="POST" action="balance_options.php">
       <div class="option" onclick="redirect()">
         <img src="https://img.icons8.com/ios/50/sales-performance-balance.png" alt="Balance Inquiry">
-        <span>Balance Inquiry</span>
+        <span><?= $lang['balance_inquiry'] ?></span>
       </div>
     </form>
 

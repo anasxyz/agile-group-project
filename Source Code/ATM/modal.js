@@ -81,10 +81,6 @@ function redirectInsertCard() {
   window.location.href = 'insert_card.php';
 }
 
-function transaction_cancelled() {
-  showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Okay", "", "redirectCardOut()", "");
-}
-
 function redirectIndex() {
   window.location.href = 'index.php';
 }

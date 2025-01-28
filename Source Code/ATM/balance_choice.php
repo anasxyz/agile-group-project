@@ -86,6 +86,9 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
   <script>
     const accountType = "<?php echo $accountType; ?>";
+    const cardNumber = "<?php echo $_SESSION['card_number']; ?>";
+    const expiry = "<?php echo $_SESSION['expiry']; ?>";
+    const pin = "<?php echo $_SESSION['pin']; ?>";
 
     function handleOption(option) {
       // Show the loading modal
@@ -98,24 +101,24 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
         // Redirect to the appropriate page
         if (option === 'view') {
-          sendTransactionData('balance inquiry');
+          sendTransactionData(cardNumber, expiry, pin, 'balance inquiry');
         } else if (option === 'print') {
           window.location.href = 'print_receipt.php';
         }
       }, 2000); // 5000ms = 5 seconds
     }
 
-    function sendTransactionData(transaction_type) {
+    function sendTransactionData(card_number, expiry_date, pin, transaction_type) {
       const transaction_data = {
-        'card_number': '1234123412341234',
-        'expiry_date': '12/25',
+        'card_number': card_number,
+        'expiry_date': expiry_date,
         'atm_id': 'ATM001',
-        'transaction_id': 'txn_random',
-        'pin': '1234',
-        'transaction_type': 'balance inquiry'
+        'transaction_id': 'txn_' + Math.random().toString(36).substr(2, 9),
+        'pin': pin,
+        'transaction_type': transaction_type
       };
 
-      fetch('http://localhost/transaction_switch.php', {
+      fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -126,11 +129,10 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       .then(data => {
         console.log(data);
         if (data.status === 'Approved') {
-            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}`;
+            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
             window.location.href = url;
         } else {
           showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-          
         }
       })
       .catch(error => {

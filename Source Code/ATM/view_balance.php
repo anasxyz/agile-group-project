@@ -3,6 +3,7 @@ session_start(); // If session data is needed
 
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
+$balance = isset($_GET['balance']) ? htmlspecialchars($_GET['balance']) : 'Unknown';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -160,7 +161,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     ?>
 
     <div class="balance-info">
-      <p>Available Balance: <strong>$1,111.11</strong></p>
+      <p>Available Balance: <strong>$<?php echo htmlspecialchars($balance) ?></strong></p>
       <p>Current Balance: <strong>$2,222.22</strong></p>
       <p>Account Balance: <strong>$3,333.33</strong></p>
     </div>

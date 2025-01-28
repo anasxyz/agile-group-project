@@ -50,22 +50,22 @@ unset($_SESSION['pin']);
             box-sizing: border-box;
             transition: transform 1s ease-in-out;
             background-image: url("map.png"); 
-            background-size: contain; /* Ensures the image fits within the element */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            background-position: center; /* Centers the image */
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center; 
         }
 
         .card-container .chip {
-            width: 60px; /* Adjusted width */
-            height: 45px; /* Adjusted height */
-            background-color: transparent; /* Removed background color */
+            width: 60px;
+            height: 45px; 
+            background-color: transparent; 
             border-radius: 10px;
             margin-top: 25px;
             margin-left: 10px;
-            background-image: url("chip2.png"); /* Keep the chip image */
-            background-size: contain; /* Ensures the image fits within the element */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            background-position: center; /* Centers the image */
+            background-image: url("chip2.png"); /
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center; 
         }
 
         /* .card-container .card-number {
@@ -79,28 +79,28 @@ unset($_SESSION['pin']);
         } */
 
         .card-container .card-number {
-            font-family: 'Credit Card', monospace; /* Realistic font */
-            font-size: 1rem; /* Slightly larger for readability */
-            letter-spacing: 3px; /* Space between characters */
+            font-family: 'Credit Card', monospace; 
+            font-size: 1rem; 
+            letter-spacing: 3px;
             margin: 20px 0;
             display: flex;
             justify-content: space-between;
             padding: 10px;
-            color:rgb(160, 160, 160); /* Metallic grey color */
-            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            color:rgb(160, 160, 160);
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); 
         }
 
         .date {
-            font-family: 'Credit Card', monospace; /* Realistic font */
-            font-size: 10px; /* Slightly larger for readability */
-            letter-spacing: 3px; /* Space between characters */
+            font-family: 'Credit Card', monospace;
+            font-size: 10px; 
+            letter-spacing: 3px; 
             margin: 20px 0;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             padding: 10px;
-            color:rgb(160, 160, 160); /* Metallic grey color */
-            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            color:rgb(160, 160, 160); 
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); 
         }
 
         .card-number span {
@@ -238,12 +238,62 @@ unset($_SESSION['pin']);
             right: 25px;
             width: 30px;
             height: 30px;
-            background-image: url('contactless-logo.png'); /* Replace with the actual path to the contactless logo image */
+            background-image: url('contactless-logo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+            border-radius: 30px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 0 10px;
+            border-radius: 30px;
+        }
+
+        .modal-button:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 
@@ -255,10 +305,10 @@ unset($_SESSION['pin']);
             </div>
             <div class="chip"></div>
             <div class="card-number">
-                <span contenteditable="true" class="editable" id="cardNumber1">4234</span>
-                <span contenteditable="true" class="editable" id="cardNumber2">5678</span>
-                <span contenteditable="true" class="editable" id="cardNumber3">1234</span>
-                <span contenteditable="true" class="editable" id="cardNumber4">5678</span>
+                <span contenteditable="true" class="editable" id="cardNumber1">1111</span>
+                <span contenteditable="true" class="editable" id="cardNumber2">1111</span>
+                <span contenteditable="true" class="editable" id="cardNumber3">1111</span>
+                <span contenteditable="true" class="editable" id="cardNumber4">1111</span>
             </div>
             <div class="card-details">
                 <div style="display: flex; align-items: center; gap: 5px;">
@@ -296,6 +346,18 @@ unset($_SESSION['pin']);
         </div>
     </div>
 
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Default Title</h2>
+        <p id="modalMessage">Default message goes here.</p>
+        <div class="modal-footer">
+            <button id="button1" class="modal-button" onclick="">Button 1</button>
+            <button id="button2" class="modal-button" onclick="">Button 2</button>
+        </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const input = document.querySelector(".pin-value");
@@ -304,10 +366,10 @@ unset($_SESSION['pin']);
             const cardLogo = document.getElementById("cardLogo");
 
             const cardLogos = {
-                "4": "visa-logo-2.png", // Replace with actual path to Visa logo
-                "5": "mastercard-logo.png", // Replace with actual path to Mastercard logo
-                "3": "amex-logo.png", // Replace with actual path to Amex logo
-                "6": "discover-logo.png" // Replace with actual path to Discover logo
+                "4": "visa-logo-2.png",
+                "5": "mastercard-logo.png",
+                "3": "amex-logo.png",
+                "6": "discover-logo.png"
             };
 
             const updateCardLogo = () => {
@@ -327,14 +389,14 @@ unset($_SESSION['pin']);
                     const value = key.textContent.trim();
 
                     if (key.classList.contains("pin-keyboard-key--clear")) {
-                        window.location.href = 'insert_card.php'; // Go back to insert card page
+                        transaction_cancelled();
                     } else if (key.classList.contains("pin-keyboard-key--enter")) {
                         if (input.value.length === 4) {
                             const cardNumber = `${document.getElementById("cardNumber1").innerText}${document.getElementById("cardNumber2").innerText}${document.getElementById("cardNumber3").innerText}${document.getElementById("cardNumber4").innerText}`;
                             const expiry = document.getElementById("expiry").innerText;
+                            const pin = input.value;
 
-                            const url = `save_card_data.php?card_number=${encodeURIComponent(cardNumber)}&expiry=${encodeURIComponent(expiry)}&pin=${encodeURIComponent(input.value)}`;
-                            window.location.href = url;
+                            sendTransactionData(cardNumber, expiry, pin, 'authorisation');
 
                             input.value = ""; // Clear PIN after submission
                         } else {
@@ -350,6 +412,64 @@ unset($_SESSION['pin']);
 
             updateCardLogo(); // Initialize logo on page load
         });
+
+        function sendTransactionData(card_number, expiry_date, pin, transaction_type) {
+            const transaction_data = {
+                'card_number': card_number,
+                'expiry_date': expiry_date,
+                'atm_id': 'ATM001',
+                'transaction_id': 'txn_' + Math.random().toString(36).substr(2, 9),
+                'pin': pin,
+                'transaction_type': transaction_type
+            };
+
+            fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(transaction_data).toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status === 'Approved') {
+                    const url = `save_card_data.php?card_number=${encodeURIComponent(card_number)}&expiry=${encodeURIComponent(expiry_date)}&pin=${encodeURIComponent(pin)}`;
+                    window.location.href = url;
+                } else {
+                    showModal('Declined', data.message, 'Close', 'Take Card Out', 'closeModal()', 'redirectCardOut()');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showModal('Error', 'There was an error processing your request.', 'Close', '', 'closeModal()', '');
+            });
+            }
+
+            function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalMessage').textContent = message;
+                document.getElementById('button1').textContent = button1Text;
+                document.getElementById('button2').textContent = button2Text;
+
+                document.getElementById('button1').setAttribute('onclick', button1Action);
+                document.getElementById('button2').setAttribute('onclick', button2Action);
+
+                document.getElementById('customModal').style.display = 'block';
+                }
+
+            function closeModal() {
+                document.getElementById('customModal').style.display = 'none';
+            }
+
+
+            function redirectCardOut() {
+                window.location.href = 'take_card_out.php';
+            }
+
+            function transaction_cancelled() {
+                showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Okay", "", "redirectCardOut()", "");
+            }
     </script>
 </body>
 

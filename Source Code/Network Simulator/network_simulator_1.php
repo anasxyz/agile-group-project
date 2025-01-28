@@ -47,6 +47,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
         $conn->close();
     }
+    elseif ($transaction_data['transaction_type'] === 'balance inquiry') {
+        $response = [
+            'transaction_id' => $transaction_data['transaction_id'],
+            'status' => 'Approved',
+            'transaction_type' => $transaction_data['transaction_type'],
+            'message' => 'Approved by network simulator 1'
+        ];
+    } 
+    elseif ($transaction_data['transaction_type'] === 'withdrawal') {
+        
+    }
 
     header('Content-Type: application/json');
     echo json_encode($response);

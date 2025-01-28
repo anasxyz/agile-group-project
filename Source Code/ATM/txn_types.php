@@ -1,10 +1,15 @@
 <?php
-session_start(); // Start the session
+session_start();
 
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include __DIR__ . "/source code/languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +28,8 @@ session_start(); // Start the session
 
     .container {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Create two equal columns */
+      grid-template-columns: repeat(2, 1fr);
+      /* Create two equal columns */
       gap: 20px;
       width: 600px;
       text-align: center;
@@ -34,7 +40,8 @@ session_start(); // Start the session
       font-weight: bold;
       color: #333;
       text-align: center;
-      grid-column: span 3; /* Make the title span both columns */
+      grid-column: span 3;
+      /* Make the title span both columns */
     }
 
     .option {
@@ -67,15 +74,15 @@ session_start(); // Start the session
 
     /* Inactive Button Styling */
     .option.inactive {
-        background-color: #b0b0b0;
-        color: #7a7a7a;
-        cursor: not-allowed;
-        box-shadow: none;
+      background-color: #b0b0b0;
+      color: #7a7a7a;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     .option.inactive:hover {
-        background-color: #b0b0b0;
-        transform: none;
+      background-color: #b0b0b0;
+      transform: none;
     }
 
     .modal {
@@ -132,24 +139,25 @@ session_start(); // Start the session
     .exit-btn-container {
       display: flex;
       justify-content: center;
-      margin-top: 20px; /* Add some space below the grid */
+      margin-top: 20px;
+      /* Add some space below the grid */
     }
 
     .exit-btn {
       padding: 10px 20px;
       font-size: 1.2em;
-      background-color:rgb(243, 187, 183);
+      background-color: rgb(243, 187, 183);
       color: white;
       border: none;
       cursor: pointer;
     }
 
     .exit-btn:hover {
-      background-color:rgb(250, 157, 157);
+      background-color: rgb(250, 157, 157);
     }
-
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Select a Transaction</h1>
@@ -165,7 +173,7 @@ session_start(); // Start the session
     <!-- Cash Withdrawal -->
     <form id="redirectForm" method="POST" action="withdrawal_options.php">
       <div class="option" onclick="showModal('Acknowledgement', 'You may be charged a fee for this transaction. Do you wish to continue?', 'Decline', 'Accept', 'closeModal()', 'redirectWithdrawal()')">
-      <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
+        <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
         <span>Cash Withdrawal</span>
       </div>
     </form>
@@ -173,7 +181,7 @@ session_start(); // Start the session
     <!-- Deposits (Inactive) -->
     <form method="POST" action="">
       <div class="option inactive" onclick="">
-      <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
+        <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
         <span>Deposits</span>
       </div>
     </form>
@@ -216,7 +224,7 @@ session_start(); // Start the session
     </div>
   </div>
 
-  
+
 
   <div id="customModal" class="modal">
     <div class="modal-content">
@@ -231,7 +239,8 @@ session_start(); // Start the session
   </div>
 
   <script src="modal.js">
-    
+
   </script>
 </body>
+
 </html>

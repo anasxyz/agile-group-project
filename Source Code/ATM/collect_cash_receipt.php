@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Take Your Card</title>
+  <title>Take Your Cash and Receipt</title>
   <style>
     body {
       margin: 0;
@@ -95,24 +95,26 @@
 </head>
 <body>
   <div class="container">
-    <div class="option" onclick="take_card_out()">
-      <span style="padding-bottom: 20px;">Take Your Card</span>
-      <img src="https://img.icons8.com/ios/100/bank-card-back-side--v1.png" alt="">
+    <div class="option" onclick="perform_another_transaction()">
+      <span style="padding-bottom: 20px;">Collect Your Cash and Receipt</span>
+      <img src="https://img.icons8.com/?size=100&id=2FhXTN29SoMh&format=png&color=000000" alt="">
     </div>
   </div>
 
-  <!-- Loading Modal -->
-  <div id="loadingModal" class="modal">
+  <div id="customModal" class="modal">
     <div class="modal-content">
-      <div class="spinner"></div>
-      <p>Processing your request...</p>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle">Default Title</h2>
+      <p id="modalMessage">Default message goes here.</p>
+      <div class="modal-footer">
+        <button id="button1" class="modal-button" onclick="">Button 1</button>
+        <button id="button2" class="modal-button" onclick="">Button 2</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    function take_card_out() {
-      window.location.href = 'thank_you.php';
-    }
+  <script src = "modal.js">
+    
   </script>
 </body>
 </html>

@@ -36,10 +36,35 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       position: relative;
     }
 
+    .modal-footer {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .modal-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .modal-button.yes {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .modal-button.no {
+      background-color: #f44336;
+      color: white;
+    }
+
+    /* Loading Spinner */
     .spinner {
       border: 6px solid #f3f3f3;
-      border-radius: 50%;
       border-top: 6px solid #333;
+      border-radius: 50%;
       width: 50px;
       height: 50px;
       animation: spin 1s linear infinite;
@@ -50,7 +75,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-  </style>
+    </style>
 </head>
 <body>
   <div class="container">
@@ -73,7 +98,18 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Receipt Confirmation Modal -->
+  <div id="receiptModal" class="modal">
+    <div class="modal-content">
+      <h2>Do you want a receipt?</h2>
+      <div class="modal-footer">
+        <button class="modal-button yes" onclick="redirectToReceiptPage(true)">Yes</button>
+        <button class="modal-button no" onclick="redirectToReceiptPage(false)">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Modal -->
   <div id="loadingModal" class="modal">
     <div class="modal-content">
       <div class="spinner"></div>
@@ -81,48 +117,15 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
   </div>
 
-  <!-- Modal 2 -->
-  <div id="customModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Default Title</h2>
-      <p id="modalMessage">Default message goes here.</p>
-      <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     const accountType = "<?php echo $accountType; ?>";
 
     function handleOption(option) {
-      // Show the loading modal
-      const modal = document.getElementById('loadingModal');
-      modal.style.display = 'block';
-
-      // Simulate a delay of 5 seconds
-      setTimeout(() => {
-        modal.style.display = 'none';
-
-        // Redirect to the appropriate page
-        if (option === '10') {
-            sendWithdrawalData(10);
-        } 
-        else if (option === '20') {
-            sendWithdrawalData(20);
-        } 
-        else if (option === '50') {
-            sendWithdrawalData(50);
-        } 
-        else if (option === 'Other Amount') {
-            window.location.href = 'custom_amount.php';
-        } 
-        else{
-          window.location.href = 'print_receipt.php';
-        }
-      }, 2000); // 5000ms = 5 seconds
+      if (option === '10' || option === '20' || option === '50') {
+        sendWithdrawalData(option);
+      } else if (option === 'Other Amount') {
+        window.location.href = 'custom_amount.php';
+      }
     }
 
     function sendWithdrawalData(withdrawal_amount) {
@@ -147,43 +150,40 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       .then(data => {
         console.log(data);
         if (data.status === 'Approved') {
-          take_out_card();
+          showReceiptModal();
         } else {
-          showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+          alert('Transaction Failed: ' + data.message);
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+        alert('There was an error processing your request.');
       });
     }
 
-    function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
-        document.getElementById('button1').textContent = button1Text;
-        document.getElementById('button2').textContent = button2Text;
-
-        document.getElementById('button1').setAttribute('onclick', button1Action);
-        document.getElementById('button2').setAttribute('onclick', button2Action);
-
-        document.getElementById('customModal').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('customModal').style.display = 'none';
-    }
-
-    function take_out_card() {
-      const modal = document.getElementById('loadingModal');
+    function showReceiptModal() {
+      const modal = document.getElementById('receiptModal');
       modal.style.display = 'block';
+    }
 
+    function redirectToReceiptPage(wantsReceipt) {
+      const modal = document.getElementById('receiptModal');
+      modal.style.display = 'none';
+
+      // Show the loading modal
+      const loadingModal = document.getElementById('loadingModal');
+      loadingModal.style.display = 'block';
+
+      // Redirect after 2 seconds
       setTimeout(() => {
-        modal.style.display = 'none';
-        window.location.href = 'take_card_out.php';
-      }, 2000); // Show the loading modal for 2 seconds
+        loadingModal.style.display = 'none';
+        if (wantsReceipt) {
+          window.location.href = 'collect_cash_receipt.php';
+        } else {
+          window.location.href = 'collect_cash.php';
+        }
+      }, 2000);
     }
   </script>
 </body>
-    
 </html>

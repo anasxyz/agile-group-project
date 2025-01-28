@@ -70,7 +70,7 @@ function redirectWithdrawal() {
 }
 
 function perform_another_transaction() {
-  showModal("Perform Another Transaction?", "Would you like to do another transaction?", "NO", "YES", "redirectCardOut()", "redirectInsertCard()")
+  showModal("Perform Another Transaction?", "Would you like to do another transaction?", "NO", "YES", "redirectThankYou()", "redirectInsertCard()")
 }
 
 function redirectCardOut() {
@@ -93,3 +93,6 @@ function redirectToCustomAmountPage() {
   window.location.href = 'custom_amount.php';
 }
 
+function redirectThankYou() {
+  window.location.href = 'thank_you.php';
+}

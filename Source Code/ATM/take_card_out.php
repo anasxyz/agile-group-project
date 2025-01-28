@@ -55,6 +55,42 @@
       font-size: 1.2em;
       color: #333;
     }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      width: 300px;
+      border-radius: 25px;
+      text-align: center;
+      position: relative;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 6px solid #333;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -65,8 +101,20 @@
     </div>
   </div>
 
+  <!-- Loading Modal -->
+  <div id="loadingModal" class="modal">
+    <div class="modal-content">
+      <div class="spinner"></div>
+      <p>Processing your request...</p>
+    </div>
+  </div>
+
   <script>
     function take_card_out() {
+      // Show the loading modal
+      const modal = document.getElementById('loadingModal');
+      modal.style.display = 'block';
+
       // Get URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const source = urlParams.get('source'); // Retrieve the 'source' parameter
@@ -74,12 +122,11 @@
       // Log the source value for debugging
       console.log('Source parameter:', source);
 
-      // Redirect based on the 'source' value
-      if (source === 'withdrawal_choice.php?account_type=${encodeURIComponent(checking)}') {
-        window.location.href = 'print_reciept.php'; // Go to print receipt
-      } else {
-        window.location.href = 'thank_you.php'; // Default redirect
-      }
+      // Redirect based on the 'source' value after a delay
+      setTimeout(() => {
+        modal.style.display = 'none';
+        window.location.href = 'print_receipt.php';
+      }, 2000); // Show the loading modal for 2 seconds
     }
   </script>
 </body>

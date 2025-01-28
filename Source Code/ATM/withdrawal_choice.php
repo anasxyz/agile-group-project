@@ -136,7 +136,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         'withdrawal_amount': withdrawal_amount
       };
 
-      fetch('http://localhost/../Transaction Switch/transaction_switch.php', {
+      fetch('http://localhost/test/transaction_switch.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -147,16 +147,13 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       .then(data => {
         console.log(data);
         if (data.status === 'Approved') {
-            const url = `take_card_out.php`;
-            window.location.href = url;
+          take_out_card();
         } else {
           showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-          
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        console.log(data);
         showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
       });
     }
@@ -178,7 +175,13 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     function take_out_card() {
-      window.location.href = 'take_card_out.php'
+      const modal = document.getElementById('loadingModal');
+      modal.style.display = 'block';
+
+      setTimeout(() => {
+        modal.style.display = 'none';
+        window.location.href = 'take_card_out.php';
+      }, 2000); // Show the loading modal for 2 seconds
     }
   </script>
 </body>

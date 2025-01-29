@@ -1,5 +1,9 @@
 <?php
 return [
+    'enter' => 'أدخل',
+    'insert_card' => 'أدخل البطاقة',
+    'tap_card' => 'اضغط على البطاقة',
+    'tap_mobile' => 'اضغط على الهاتف المحمول',
     'how_would_you_like_balance' => 'كيف تريد عرض الرصيد؟',
     'view_balance' => 'عرض الرصيد',
     'print_balance' => 'طباعة الرصيد',

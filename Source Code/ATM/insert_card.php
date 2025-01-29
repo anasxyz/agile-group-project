@@ -1,11 +1,17 @@
 <?php
 session_start();
 
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
+
 // Clear all session values related to card information
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,23 +55,33 @@ unset($_SESSION['pin']);
             padding: 20px;
             box-sizing: border-box;
             transition: transform 1s ease-in-out;
-            background-image: url("map.png"); 
-            background-size: contain; /* Ensures the image fits within the element */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            background-position: center; /* Centers the image */
+            background-image: url("map.png");
+            background-size: contain;
+            /* Ensures the image fits within the element */
+            background-repeat: no-repeat;
+            /* Prevents the image from repeating */
+            background-position: center;
+            /* Centers the image */
         }
 
         .card-container .chip {
-            width: 60px; /* Adjusted width */
-            height: 45px; /* Adjusted height */
-            background-color: transparent; /* Removed background color */
+            width: 60px;
+            /* Adjusted width */
+            height: 45px;
+            /* Adjusted height */
+            background-color: transparent;
+            /* Removed background color */
             border-radius: 10px;
             margin-top: 25px;
             margin-left: 10px;
-            background-image: url("chip2.png"); /* Keep the chip image */
-            background-size: contain; /* Ensures the image fits within the element */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            background-position: center; /* Centers the image */
+            background-image: url("chip2.png");
+            /* Keep the chip image */
+            background-size: contain;
+            /* Ensures the image fits within the element */
+            background-repeat: no-repeat;
+            /* Prevents the image from repeating */
+            background-position: center;
+            /* Centers the image */
         }
 
         /* .card-container .card-number {
@@ -79,28 +95,38 @@ unset($_SESSION['pin']);
         } */
 
         .card-container .card-number {
-            font-family: 'Credit Card', monospace; /* Realistic font */
-            font-size: 1rem; /* Slightly larger for readability */
-            letter-spacing: 3px; /* Space between characters */
+            font-family: 'Credit Card', monospace;
+            /* Realistic font */
+            font-size: 1rem;
+            /* Slightly larger for readability */
+            letter-spacing: 3px;
+            /* Space between characters */
             margin: 20px 0;
             display: flex;
             justify-content: space-between;
             padding: 10px;
-            color:rgb(160, 160, 160); /* Metallic grey color */
-            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            color: rgb(160, 160, 160);
+            /* Metallic grey color */
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5);
+            /* Subtle shadow for depth */
         }
 
         .date {
-            font-family: 'Credit Card', monospace; /* Realistic font */
-            font-size: 10px; /* Slightly larger for readability */
-            letter-spacing: 3px; /* Space between characters */
+            font-family: 'Credit Card', monospace;
+            /* Realistic font */
+            font-size: 10px;
+            /* Slightly larger for readability */
+            letter-spacing: 3px;
+            /* Space between characters */
             margin: 20px 0;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             padding: 10px;
-            color:rgb(160, 160, 160); /* Metallic grey color */
-            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            color: rgb(160, 160, 160);
+            /* Metallic grey color */
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5);
+            /* Subtle shadow for depth */
         }
 
         .card-number span {
@@ -238,12 +264,12 @@ unset($_SESSION['pin']);
             right: 25px;
             width: 30px;
             height: 30px;
-            background-image: url('contactless-logo.png'); /* Replace with the actual path to the contactless logo image */
+            background-image: url('contactless-logo.png');
+            /* Replace with the actual path to the contactless logo image */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
-
     </style>
 </head>
 
@@ -277,7 +303,7 @@ unset($_SESSION['pin']);
 
         <!-- PIN Entry Section -->
         <div class="pin-screen">
-            <h1>Enter PIN</h1>
+            <h1><?= $lang['enter_pin'] ?></h1>
             <input type="password" class="pin-value" readonly>
             <div class="pin-keyboard">
                 <button class="pin-keyboard-key">1</button>
@@ -289,9 +315,9 @@ unset($_SESSION['pin']);
                 <button class="pin-keyboard-key">7</button>
                 <button class="pin-keyboard-key">8</button>
                 <button class="pin-keyboard-key">9</button>
-                <button class="pin-keyboard-key pin-keyboard-key--clear">Exit</button>
+                <button class="pin-keyboard-key pin-keyboard-key--clear"><?= $lang['enter'] ?></button>
                 <button class="pin-keyboard-key">0</button>
-                <button class="pin-keyboard-key pin-keyboard-key--enter">Enter</button>
+                <button class="pin-keyboard-key pin-keyboard-key--enter"><?= $lang['enter'] ?></button>
             </div>
         </div>
     </div>

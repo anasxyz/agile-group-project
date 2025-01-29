@@ -1,5 +1,9 @@
 <?php
 return [
+    'enter' => 'Eingeben',
+    'insert_card' => 'Karte einlegen',
+    'tap_card' => 'Karte tippen',
+    'tap_mobile' => 'Mobilgerät tippen',
     'how_would_you_like_balance' => 'Wie möchten Sie Ihren Kontostand anzeigen?',
     'view_balance' => 'Kontostand anzeigen',
     'print_balance' => 'Kontostand drucken',

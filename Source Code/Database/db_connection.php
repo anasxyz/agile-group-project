@@ -1,7 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
+$servername = "databaseatm.cv6mcgeknvyl.us-east-1.rds.amazonaws.com";
+$username = "admin";
+$password = "databaseatm12";
 $dbname = "Bank";
 
 $conn = new mysqli($servername, $username, $password, $dbname);

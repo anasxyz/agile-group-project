@@ -103,22 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
 
             //Log transaction to database
-                $transactionStmt = $conn->prepare( "INSERT INTO Transactions (CardNumber, Date, PreBalance, NewBalance) 
-                             VALUES (:cardNumber, CURDATE(), :preBalance, :newBalance)");
+                $transactionStmt = $conn->prepare( "INSERT INTO Transactions (TransactionId, CardNumber, Date, PreBalance, NewBalance) 
+                             VALUES (: transId, cardNumber, CURDATE(), :preBalance, :newBalance)");
                 $transactionStmt->bindParam(':cardNumber', $card_number);
                 $transactionStmt->bindParam(':preBalance', $storedBalance);
                 $transactionStmt->bindParam(':newBalance', $balance);
+                $transactionStmt->bindParam('transId', $transaction_data['transaction_id']);
                 $transactionStmt->execute();
             
 
-            //Insert a record into the NetworkSimulatorLogs table
-                $transactionId = $conn->lastInsertId();
-                $logStmt = $conn->prepare("INSERT INTO NetworkSimulatorLogs (CardNumber, TransactionId, Date, Balance) 
-                VALUES (:cardNumber, :transactionId, CURDATE(), :balance)");
-                $logStmt->bindParam(':cardNumber', $card_number);
-                $logStmt->bindParam(':transactionId', $transactionId); //Not sure about transactionId being part of the stored table for logs, as balance inquiry and authorisation aren't stored for transactionId
-                $logStmt->bindParam(':balance', $balance);
-                $logStmt->execute();
+            
                 
             //Successful response
             $response = [
@@ -140,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }    
     
         } 
+        
         else {
             //Card number not found
             $response = [
@@ -151,6 +146,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     
+    //Insert a record into the NetworkSimulatorLogs table
+    $logStmt = $conn->prepare("INSERT INTO NetworkSimulatorLogs (CardNumber, TransactionId, Date, Balance) 
+    VALUES (:cardNumber, :transactionId, CURDATE(), :balance)");
+    $logStmt->bindParam(':cardNumber', $card_number);
+    $logStmt->bindParam(':transactionId', $transaction_data['transaction_id']); // Ensure this is correctly assigned
+    $logStmt->bindParam(':transactionType', $transaction_data['transaction_type']);
+    $logStmt->bindParam(':status', $response['status']);
+    $logStmt->bindParam(':balance', $balance);
+    $logStmt->execute();
 
     header('Content-Type: application/json');
     echo json_encode($response);

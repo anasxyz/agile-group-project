@@ -71,6 +71,19 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
   </div>
 
+  <!-- Modal 2 -->
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle">Default Title</h2>
+      <p id="modalMessage">Default message goes here.</p>
+      <div class="modal-footer">
+        <button id="button1" class="modal-button" onclick="">Button 1</button>
+        <button id="button2" class="modal-button" onclick="">Button 2</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const accountType = "<?php echo $accountType; ?>";
     const cardNumber = "<?php echo $_SESSION['card_number']; ?>";
@@ -81,12 +94,18 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       // Show the loading modal
       const modal = document.getElementById('loadingModal');
       modal.style.display = 'block';
-      
-      if (option === 'view') {
-        sendTransactionData(cardNumber, expiry, pin, 'balance inquiry');
-      } else if (option === 'print') {
-        window.location.href = 'print_receipt.php';
-      }
+
+      // Simulate a delay of 5 seconds
+      setTimeout(() => {
+        modal.style.display = 'none';
+
+        // Redirect to the appropriate page
+        if (option === 'view') {
+          sendTransactionData(cardNumber, expiry, pin, 'balance inquiry');
+        } else if (option === 'print') {
+          window.location.href = 'print_receipt.php';
+        }
+      }, 2000); // 5000ms = 5 seconds
     }
 
     function sendTransactionData(card_number, expiry_date, pin, transaction_type) {
@@ -99,28 +118,48 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         'transaction_type': transaction_type
       };
 
-      function checkStatus() {
-        fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(transaction_data).toString()
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === 'Approved') {
-            setTimeout(5000);
-            window.location.href = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
-          } else {
-            setTimeout(checkStatus, 5000); // Retry every 5 seconds
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          setTimeout(checkStatus, 5000); // Retry on failure
-        });
-      }
+      fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(transaction_data).toString()
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === 'Approved') {
+            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
+            window.location.href = url;
+        } else {
+          showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        console.log(data);
+        showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+      });
+    }
 
-      checkStatus(); // Start polling
+    function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('button1').textContent = button1Text;
+        document.getElementById('button2').textContent = button2Text;
+
+        document.getElementById('button1').setAttribute('onclick', button1Action);
+        document.getElementById('button2').setAttribute('onclick', button2Action);
+
+        document.getElementById('customModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('customModal').style.display = 'none';
+    }
+
+    function take_out_card() {
+      window.location.href = 'take_card_out.php'
     }
   </script>
 </body>

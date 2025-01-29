@@ -77,7 +77,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->close();
     } 
     elseif ($transaction_data['transaction_type'] === 'withdrawal') {
-        // handle withdrawal logic
+        $Cardno = $transaction_data['card_number'];
+        $query = "SELECT AccountId, card_number, Balance FROM Accounts WHERE AccountId = :cardno";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':cardno', $Cardno);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $storedBalance = (double)$row['Balance'];
+
+            if ($storedBalance >= $withdrawalAmount) {
+
+            $newBalance = $storedBalance - $withdrawalAmount;
+
+
+            // Update the balance in the database
+            $withdrawQuery = "UPDATE Accounts SET Balance = :newBalance WHERE card_number = :cardno";
+            $withdrawStmt = $conn->prepare($withdrawQuery);
+            $withdrawStmt->bindParam(':newBalance', $newBalance);
+            $withdrawStmt->bindParam(':cardno', $Cardno);
+            $withdrawStmt->execute();
+            
+            $response = [
+                'transaction_id' => $transaction_data['transaction_id'],
+                'status' => 'Approved',
+                'transaction_type' => $transaction_data['transaction_type'],
+                'message' => 'Withdrawal has been made successfully'
+            ];
+            } 
+            
+            else {
+            //Insufficient funds
+            $response = [
+                'transaction_id' => $transaction_data['transaction_id'],
+                'status' => 'Declined',
+                'transaction_type' => $transaction_data['transaction_type'],
+                'message' => 'Insufficient funds'
+            ];
+        }
+        } else {
+            //Card number not found
+            $response = [
+                'transaction_id' => $transaction_data['transaction_id'],
+                'status' => 'Declined',
+                'transaction_type' => $transaction_data['transaction_type'],
+                'message' => 'Card number not found'
+            ];
+        }
     }
 
     header('Content-Type: application/json');

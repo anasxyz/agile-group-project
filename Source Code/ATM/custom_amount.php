@@ -1,12 +1,19 @@
 <?php
 session_start(); // If session data is needed
 
+
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
+
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +28,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             background-color: #f4f4f9;
             margin: 0;
         }
+
         .amount-form {
             background: #fff;
             padding: 20px;
@@ -29,6 +37,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             width: 300px;
             text-align: center;
         }
+
         .amount-form input {
             padding: 10px;
             margin: 10px 0;
@@ -37,6 +46,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         .amount-form button {
             padding: 10px;
             width: 100%;
@@ -47,9 +57,11 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             cursor: pointer;
             font-size: 16px;
         }
+
         .amount-form button:hover {
             background-color: #0056b3;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -61,6 +73,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background: #fff;
             padding: 20px;
@@ -68,6 +81,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             text-align: center;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .modal-content button {
             padding: 10px;
             margin: 10px 5px;
@@ -76,35 +90,40 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             cursor: pointer;
             font-size: 14px;
         }
+
         .confirm {
             background-color: #28a745;
             color: #fff;
         }
+
         .confirm:hover {
             background-color: #218838;
         }
+
         .cancel {
             background-color: #dc3545;
             color: #fff;
         }
+
         .cancel:hover {
             background-color: #c82333;
         }
     </style>
 </head>
+
 <body>
     <div class="amount-form">
-        <h2>Enter Custom Amount</h2>
+        <h2><?= $lang['enter_custom_amount'] ?></h2>
         <input type="number" id="amount" placeholder="Enter amount" min="0" step="0.01">
-        <button onclick="showModal()">Submit</button>
+        <button onclick="showModal()"><?= $lang['submit'] ?></button>
     </div>
 
     <div class="modal" id="confirmationModal">
         <div class="modal-content">
-            <h3>Confirm Withdrawal</h3>
+            <h3><?= $lang['confirm_withdrawal'] ?></h3>
             <p id="modalMessage"></p>
-            <button class="confirm" onclick="confirmWithdrawal()">Confirm</button>
-            <button class="cancel" onclick="closeModal()">Cancel</button>
+            <button class="confirm" onclick="confirmWithdrawal()"><?= $lang['confirm'] ?></button>
+            <button class="cancel" onclick="closeModal()"><?= $lang['cancel'] ?></button>
         </div>
     </div>
 
@@ -123,26 +142,26 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             };
 
             fetch('http://localhost/../Transaction Switch/transaction_switch.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(transaction_data).toString()
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.status === 'Approved') {
-                    const url = `take_card_out.php`;
-                    window.location.href = url;
-                } else {
-                    alert(`Transaction Failed: ${data.message}`);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error processing your request.');
-            });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(transaction_data).toString()
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 'Approved') {
+                        const url = `take_card_out.php`;
+                        window.location.href = url;
+                    } else {
+                        alert(`Transaction Failed: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error processing your request.');
+                });
         }
 
         function showModal() {
@@ -167,4 +186,5 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         }
     </script>
 </body>
+
 </html>

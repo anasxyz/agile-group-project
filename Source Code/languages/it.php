@@ -1,5 +1,9 @@
 <?php
 return [
+    'enter' => 'Inserisci',
+    'insert_card' => 'Inserisci la carta',
+    'tap_card' => 'Tocca la carta',
+    'tap_mobile' => 'Tocca il cellulare',
     'how_would_you_like_balance' => 'Come desideri visualizzare il saldo?',
     'view_balance' => 'Visualizza saldo',
     'print_balance' => 'Stampa saldo',

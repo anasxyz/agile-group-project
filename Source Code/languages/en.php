@@ -1,6 +1,10 @@
 <?php
 // English translation file
 return [
+    'enter' => 'Enter',
+    'insert_card' => 'Insert Card',
+    'tap_card' => 'Tap Card',
+    'tap_mobile' => 'Tap Mobile',
     'how_would_you_like_balance' => 'How would you like your Balance?',
     'view_balance' => 'View Balance',
     'print_balance' => 'Print Balance',

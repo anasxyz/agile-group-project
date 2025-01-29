@@ -2,10 +2,17 @@
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
+
+
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,34 +70,36 @@ unset($_SESSION['pin']);
 
     /* Inactive Button Styling */
     .option.inactive {
-        background-color: #b0b0b0;
-        color: #7a7a7a;
-        cursor: not-allowed;
-        box-shadow: none;
+      background-color: #b0b0b0;
+      color: #7a7a7a;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     .option.inactive:hover {
-        background-color: #b0b0b0; /* Disable hover effect */
-        transform: none; /* Disable hover transform */
+      background-color: #b0b0b0;
+      /* Disable hover effect */
+      transform: none;
+      /* Disable hover transform */
     }
-
   </style>
 </head>
+
 <body>
   <div class="container">
     <form id="redirectForm" method="POST" action="insert_card.php">
       <div class="option" onclick="redirectToPinEntry()">
         <img src="https://img.icons8.com/ios/50/bank-card-back-side--v1.png" alt="Insert Card Icon">
-        <span>Insert Card</span>
+        <span><?= $lang['insert_card'] ?></span>
       </div>
     </form>
     <div class="option inactive">
       <img src="https://img.icons8.com/pulsar-line/48/credit-card-contactless.png" alt="Tap Card Icon">
-      <span>Tap Card</span>
+      <span><?= $lang['tap_card'] ?></span>
     </div>
     <div class="option inactive">
       <img src="https://img.icons8.com/fluency-systems-regular/50/multiple-smartphones.png" alt="Tap Mobile Icon">
-      <span>Tap Mobile</span>
+      <span><?= $lang['tap_mobile'] ?></span>
     </div>
   </div>
 
@@ -100,4 +109,5 @@ unset($_SESSION['pin']);
     }
   </script>
 </body>
+
 </html>

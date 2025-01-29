@@ -124,13 +124,23 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     function sendTransactionData(transaction_type) {
+      let currencyType = sessionStorage.getItem('currencyType') || 'gbp'; // Default to 'gbp' if not set
+      if (currencyType === '£') {
+        currencyType = 'gbp';
+      } else if (currencyType === '$') {
+        currencyType = 'usd';
+      } else if (currencyType.toLowerCase() === 'euro') {
+        currencyType = 'eur';
+      }
+
       const transaction_data = {
         'card_number': '1234123412341234',
         'expiry_date': '12/25',
         'atm_id': 'ATM001',
         'transaction_id': 'txn_random',
         'pin': '1234',
-        'transaction_type': 'balance inquiry'
+        'transaction_type': 'balance inquiry',
+        'currency_type': currencyType
       };
 
       fetch('http://localhost/transaction_switch.php', {

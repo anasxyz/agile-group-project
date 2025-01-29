@@ -56,6 +56,11 @@ function showModal(title, message, button1Text, button2Text, button1Action, butt
       window.location.href = url;
   }
 
+  function redirectToWithdrawalChoice(accountType) {
+    const url = `withdrawal_choice.php?account_type=${encodeURIComponent(accountType)}`;
+    window.location.href = url;
+  }
+
 
   function setCurrencyType(currencyType) {
     sessionStorage.setItem('currencyType', currencyType);

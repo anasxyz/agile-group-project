@@ -1,5 +1,9 @@
 <?php
 return [
+    'enter' => 'Entrer',
+    'insert_card' => 'Insérer la carte',
+    'tap_card' => 'Taper sur la carte',
+    'tap_mobile' => 'Taper sur le mobile',
     'how_would_you_like_balance' => 'Comment souhaitez-vous afficher votre solde ?',
     'view_balance' => 'Voir le solde',
     'print_balance' => 'Imprimer le solde',

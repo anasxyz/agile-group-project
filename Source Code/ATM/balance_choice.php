@@ -61,6 +61,10 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     <div class="option" onclick="handleOption('print')">
       <span>Print Balance</span>
     </div>
+
+    <div class="option" onclick="redirectToCurrencyOptions()">
+      <span id="currentCurrency">Change Currency <br> Current: £</span>
+    </div>
   </div>
 
   <!-- Modal -->
@@ -85,6 +89,19 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
   </div>
 
   <script>
+    //Used to show current currency
+    window.onload = function() {
+      var currencyType = sessionStorage.getItem('currencyType'); // Retrieve session variable
+
+      if (currencyType) {
+          document.getElementById('currentCurrency').innerHTML = "Choose Currency <br> Current: " + currencyType; // Update span with session value
+      } 
+    };
+
+    function redirectToCurrencyOptions() {
+      window.location.href = 'currency_options.php';
+    }
+
     const accountType = "<?php echo $accountType; ?>";
     const cardNumber = "<?php echo $_SESSION['card_number']; ?>";
     const expiry = "<?php echo $_SESSION['expiry']; ?>";
@@ -109,13 +126,24 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     function sendTransactionData(card_number, expiry_date, pin, transaction_type) {
+      // Uses the currency session variable to determine the currency type
+      let currencyType = sessionStorage.getItem('currencyType') || 'gbp'; // Default to 'gbp' if not set
+      if (currencyType === '£') {
+        currencyType = 'gbp';
+      } else if (currencyType === '$') {
+        currencyType = 'usd';
+      } else if (currencyType.toLowerCase() === 'euro') {
+        currencyType = 'eur';
+      }
+      
       const transaction_data = {
         'card_number': card_number,
         'expiry_date': expiry_date,
         'atm_id': 'ATM001',
         'transaction_id': 'txn_' + Math.random().toString(36).substr(2, 9),
         'pin': pin,
-        'transaction_type': transaction_type
+        'transaction_type': transaction_type,
+        'currency_type': currencyType
       };
 
       fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {

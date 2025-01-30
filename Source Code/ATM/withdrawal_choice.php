@@ -118,6 +118,10 @@ $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['curre
     function transaction_cancelled() {
         showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
+
+    function backTo(page) {
+      window.location.href = page.endsWith(".php") ? page : page + ".php";
+    }
   </script>
 </body>
     

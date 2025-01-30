@@ -37,7 +37,6 @@ session_start(); // Ensure session is started to use session variables
 
     <div class="option" onclick="backTo('txn_types')">
       <span>Main Menu</span>
-    </div>
   </div>
 
   <div id="customModal" class="modal">

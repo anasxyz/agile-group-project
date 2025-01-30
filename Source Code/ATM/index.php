@@ -1,11 +1,16 @@
 <?php
+session_start(); // If session data is needed
+
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
+
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
 
 <head>
   <meta charset="UTF-8">
@@ -84,16 +89,16 @@ unset($_SESSION['pin']);
     <form id="redirectForm" method="POST" action="insert_card.php">
       <div class="option" onclick="redirectToPinEntry()">
         <img src="https://img.icons8.com/ios/50/bank-card-back-side--v1.png" alt="Insert Card Icon">
-        <span>Insert Your Card</span>
+        <span><?= $lang['insert_card'] ?></span>
       </div>
     </form>
     <div class="option inactive">
       <img src="https://img.icons8.com/pulsar-line/48/credit-card-contactless.png" alt="Tap Card Icon">
-      <span>Tap Card</span>
+      <span><?= $lang['tap_card'] ?></span>
     </div>
     <div class="option inactive">
       <img src="https://img.icons8.com/fluency-systems-regular/50/multiple-smartphones.png" alt="Tap Mobile Icon">
-      <span>Tap Mobile</span>
+      <span><?= $lang['tap_mobile'] ?></span>
     </div>
   </div>
 

@@ -1,9 +1,13 @@
 <?php
 session_start();
+
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -202,10 +206,11 @@ session_start();
         }
     </style>
 </head>
+
 <body>
     <div class="main-container">
         <div class="cash-screen">
-            <h1>Enter Custom Amount</h1>
+            <h1><?= $lang['enter_custom_amount'] ?></h1>
             <input type="text" class="cash-value" id="cashInput" readonly>
             <div class="number-pad">
                 <button class="number-key" onclick="addNumber(1)">1</button>
@@ -217,27 +222,27 @@ session_start();
                 <button class="number-key" onclick="addNumber(7)">7</button>
                 <button class="number-key" onclick="addNumber(8)">8</button>
                 <button class="number-key" onclick="addNumber(9)">9</button>
-                <button class="number-key number-key--clear" onclick="clearInput()">Clear</button>
+                <button class="number-key number-key--clear" onclick="clearInput()"><?= $lang['clear'] ?></button>
                 <button class="number-key" onclick="addNumber(0)">0</button>
-                <button class="number-key number-key--enter" onclick="submitAmount()">Enter</button>
+                <button class="number-key number-key--enter" onclick="submitAmount()"><?= $lang['enter'] ?></button>
             </div>
 
             <div class="button-container">
-                <button class="exit-button" onclick="transaction_cancelled()">Exit</button>
-                <button class="menu-button" onclick="goToMainMenu()">Main Menu</button>
+                <button class="exit-button" onclick="transaction_cancelled()"><?= $lang['exit'] ?></button>
+                <button class="menu-button" onclick="goToMainMenu()"><?= $lang['main_menu'] ?></button>
             </div>
         </div>
     </div>
 
     <div id="customModal" class="modal">
         <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle">Default Title</h2>
-        <p id="modalMessage">Default message goes here.</p>
-        <div class="modal-footer">
-            <button id="button1" class="modal-button" onclick="">Button 1</button>
-            <button id="button2" class="modal-button" onclick="">Button 2</button>
-        </div>
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Default Title</h2>
+            <p id="modalMessage">Default message goes here.</p>
+            <div class="modal-footer">
+                <button id="button1" class="modal-button" onclick="">Button 1</button>
+                <button id="button2" class="modal-button" onclick="">Button 2</button>
+            </div>
         </div>
     </div>
 
@@ -285,11 +290,12 @@ session_start();
             document.getElementById('button2').setAttribute('onclick', button2Action);
 
             document.getElementById('customModal').style.display = 'block';
-            }
+        }
 
         function closeModal() {
             document.getElementById('customModal').style.display = 'none';
         }
     </script>
 </body>
+
 </html>

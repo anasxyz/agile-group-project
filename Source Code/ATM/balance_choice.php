@@ -1,11 +1,15 @@
 <?php
 session_start(); // If session data is needed
 
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
+
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,29 +49,35 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>How would you like your Balance?</h1>
+    <h1><?= $lang['how_would_you_like_balance'] ?></h1>
 
     <div class="option" onclick="handleOption('view')">
-      <span>View Balance</span>
+      <span><?= $lang['view_balance'] ?></span>
     </div>
 
     <div class="option" onclick="handleOption('print')">
-      <span>Print Balance</span>
+      <span><?= $lang['print_balance'] ?></span>
     </div>
 
     <div class="option" onclick="transaction_cancelled()">
-      <span>Exit</span>
+      <span><?= $lang['exit'] ?></span>
     </div>
 
     <div class="option" onclick="backTo('txn_types')">
-      <span>Main Menu</span>
+      <span><?= $lang['main_menu'] ?></span>
     </div>
   </div>
 
@@ -75,7 +85,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
   <div id="loadingModal" class="modal">
     <div class="modal-content">
       <div class="spinner"></div>
-      <p>Processing your request...</p>
+      <p><?= $lang['processing_request'] ?></p>
     </div>
   </div>
 
@@ -128,43 +138,43 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       };
 
       fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(transaction_data).toString()
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.status === 'Approved') {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(transaction_data).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.status === 'Approved') {
             const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}&currency=${encodeURIComponent(currency)}`;
             window.location.href = url;
-        } else {
-          showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        console.log(data);
-        showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-      });
+          } else {
+            showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          console.log(data);
+          showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+        });
     }
 
     function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
-        document.getElementById('button1').textContent = button1Text;
-        document.getElementById('button2').textContent = button2Text;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMessage').textContent = message;
+      document.getElementById('button1').textContent = button1Text;
+      document.getElementById('button2').textContent = button2Text;
 
-        document.getElementById('button1').setAttribute('onclick', button1Action);
-        document.getElementById('button2').setAttribute('onclick', button2Action);
+      document.getElementById('button1').setAttribute('onclick', button1Action);
+      document.getElementById('button2').setAttribute('onclick', button2Action);
 
-        document.getElementById('customModal').style.display = 'block';
+      document.getElementById('customModal').style.display = 'block';
     }
 
     function closeModal() {
-        document.getElementById('customModal').style.display = 'none';
+      document.getElementById('customModal').style.display = 'none';
     }
 
     function take_out_card() {
@@ -176,8 +186,9 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     function transaction_cancelled() {
-        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
+      showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
   </script>
 </body>
+
 </html>

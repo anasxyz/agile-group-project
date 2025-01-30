@@ -1,5 +1,13 @@
+<?php
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,11 +79,12 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="option" onclick="perform_another_transaction()">
-      <span style="padding-bottom: 20px;">Take Your Receipt</span>
-      <img src="https://img.icons8.com/pulsar-line/100/receipt.png" alt="receipt"/>
+      <span style="padding-bottom: 20px;"><?= $lang['take_your_receipt'] ?></span>
+      <img src="https://img.icons8.com/pulsar-line/100/receipt.png" alt="receipt" />
     </div>
   </div>
 
@@ -92,7 +101,8 @@
   </div>
 
   <script src="modal.js">
-    
+
   </script>
 </body>
+
 </html>

@@ -72,8 +72,12 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       <span>Other Amount</span>
     </div>
 
-    <div class="option" onclick="backTo('withdrawal_options')">
-      <span>Back</span>
+    <div class="option" onclick="transaction_cancelled()">
+      <span>Exit</span>
+    </div>
+
+    <div class="option" onclick="backTo('txn_types')">
+      <span>Main Menu</span>
     </div>
   </div>
 
@@ -108,6 +112,10 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
     function backTo(page) {
       window.location.href = page.endsWith(".php") ? page : page + ".php";
+    }
+
+    function transaction_cancelled() {
+        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
   </script>
 </body>

@@ -174,7 +174,7 @@ $lang = include "../languages/{$language}.php";
     <form id="redirectForm" method="POST" action="withdrawal_options.php">
       <div class="option" onclick="showModal('Acknowledgement', 'You may be charged a fee for this transaction. Do you wish to continue?', 'Decline', 'Accept', 'closeModal()', 'redirectWithdrawal()')">
         <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
-        <span>Cash Withdrawal</span>
+        <span><?= $lang['cash_withdrawal'] ?></span>
       </div>
     </form>
 
@@ -182,7 +182,7 @@ $lang = include "../languages/{$language}.php";
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
-        <span>Deposits</span>
+        <span><?= $lang['deposits'] ?></span>
       </div>
     </form>
 
@@ -190,7 +190,7 @@ $lang = include "../languages/{$language}.php";
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/ios/50/cash-in-hand.png" alt="">
-        <span>Payments</span>
+        <span><?= $lang['payments'] ?></span>
       </div>
     </form>
 
@@ -198,7 +198,7 @@ $lang = include "../languages/{$language}.php";
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/pulsar-line/100/cash.png" alt="">
-        <span>Mixed Deposits</span>
+        <span><?= $lang['mixed_deposits'] ?></span>
       </div>
     </form>
 
@@ -206,7 +206,7 @@ $lang = include "../languages/{$language}.php";
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/pulsar-line/100/check.png" alt="">
-        <span>Cash a Check</span>
+        <span><?= $lang['cash_a_check'] ?></span>
       </div>
     </form>
 
@@ -214,13 +214,13 @@ $lang = include "../languages/{$language}.php";
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/wired/64/cash-in-hand.png" alt="">
-        <span>Check Deposit With CashBack</span>
+        <span><?= $lang['check_deposit_cashback'] ?></span>
       </div>
     </form>
 
     <div class="option exit-btn" onclick="transaction_cancelled()">
       <img src="https://img.icons8.com/ios-filled/50/logout-rounded.png" alt="">
-      <span style="padding-top: 10px;">Exit</span>
+      <span style="padding-top: 10px;"><?= $lang['exit'] ?></span>
     </div>
   </div>
 

@@ -6,6 +6,7 @@ unset($_SESSION['pin']);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,25 +64,27 @@ unset($_SESSION['pin']);
 
     /* Inactive Button Styling */
     .option.inactive {
-        background-color: #b0b0b0;
-        color: #7a7a7a;
-        cursor: not-allowed;
-        box-shadow: none;
+      background-color: #b0b0b0;
+      color: #7a7a7a;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     .option.inactive:hover {
-        background-color: #b0b0b0; /* Disable hover effect */
-        transform: none; /* Disable hover transform */
+      background-color: #b0b0b0;
+      /* Disable hover effect */
+      transform: none;
+      /* Disable hover transform */
     }
-
   </style>
 </head>
+
 <body>
   <div class="container">
     <form id="redirectForm" method="POST" action="insert_card.php">
       <div class="option" onclick="redirectToPinEntry()">
         <img src="https://img.icons8.com/ios/50/bank-card-back-side--v1.png" alt="Insert Card Icon">
-        <span>Insert Card</span>
+        <span>Insert Your Card</span>
       </div>
     </form>
     <div class="option inactive">
@@ -100,4 +103,5 @@ unset($_SESSION['pin']);
     }
   </script>
 </body>
+
 </html>

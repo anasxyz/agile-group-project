@@ -1,9 +1,7 @@
 <?php
 session_start(); // If session data is needed
 
-$_SESSION['language'] = 'es';
 $language = $_SESSION['language'] ?? 'en';
-
 $lang = include "../languages/{$language}.php";
 
 // Retrieve the account type from the URL

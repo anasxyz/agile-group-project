@@ -1,5 +1,13 @@
+<?php
+session_start(); // If session data is needed
+
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,10 +65,11 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="option" onclick="take_card_out()">
-      <span style="padding-bottom: 20px;">Take Your Card</span>
+      <span style="padding-bottom: 20px;"><?= $lang['take_card'] ?></span>
       <img src="https://img.icons8.com/ios/100/bank-card-back-side--v1.png" alt="">
     </div>
   </div>
@@ -83,4 +92,5 @@
     }
   </script>
 </body>
+
 </html>

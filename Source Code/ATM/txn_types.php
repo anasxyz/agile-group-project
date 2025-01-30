@@ -1,9 +1,7 @@
 <?php
 session_start();
 
-$_SESSION['language'] = 'es';
 $language = $_SESSION['language'] ?? 'en';
-
 $lang = include "../languages/{$language}.php";
 ?>
 
@@ -13,7 +11,7 @@ $lang = include "../languages/{$language}.php";
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Interaction UI</title>
+  <title><?= $lang['welcome'] ?></title>
   <style>
     body {
       margin: 0;
@@ -29,7 +27,6 @@ $lang = include "../languages/{$language}.php";
     .container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      /* Create two equal columns */
       gap: 20px;
       width: 600px;
       text-align: center;
@@ -40,8 +37,7 @@ $lang = include "../languages/{$language}.php";
       font-weight: bold;
       color: #333;
       text-align: center;
-      grid-column: span 3;
-      /* Make the title span both columns */
+      grid-column: span 2;
     }
 
     .option {
@@ -85,64 +81,6 @@ $lang = include "../languages/{$language}.php";
       transform: none;
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      text-align: center;
-      border-radius: 30px;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .modal-footer {
-      margin-top: 20px;
-    }
-
-    .modal-button {
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      margin: 0 10px;
-      border-radius: 30px;
-    }
-
-    .modal-button:hover {
-      background-color: #ddd;
-    }
-
-    .exit-btn-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      /* Add some space below the grid */
-    }
-
     .exit-btn {
       padding: 10px 20px;
       font-size: 1.2em;
@@ -163,84 +101,56 @@ $lang = include "../languages/{$language}.php";
     <h1><?= $lang['select_transaction'] ?></h1>
 
     <!-- Balance Inquiry -->
-    <form id="redirectForm" method="POST" action="balance_options.php">
-      <div class="option" onclick="redirect()">
+    <form method="POST" action="balance_options.php">
+      <div class="option" onclick="this.closest('form').submit();">
         <img src="https://img.icons8.com/ios/50/sales-performance-balance.png" alt="Balance Inquiry">
         <span><?= $lang['balance_inquiry'] ?></span>
       </div>
     </form>
 
     <!-- Cash Withdrawal -->
-    <form id="redirectForm" method="POST" action="withdrawal_options.php">
-      <div class="option" onclick="showModal('Acknowledgement', 'You may be charged a fee for this transaction. Do you wish to continue?', 'Decline', 'Accept', 'closeModal()', 'redirectWithdrawal()')">
-        <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
+    <form method="POST" action="withdrawal_options.php">
+      <div class="option" onclick="this.closest('form').submit();">
+        <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="Cash Withdrawal">
         <span><?= $lang['cash_withdrawal'] ?></span>
       </div>
     </form>
 
     <!-- Deposits (Inactive) -->
-    <form method="POST" action="">
-      <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
-        <span><?= $lang['deposits'] ?></span>
-      </div>
-    </form>
+    <div class="option inactive">
+      <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="Deposits">
+      <span><?= $lang['deposits'] ?></span>
+    </div>
 
     <!-- Payments (Inactive) -->
-    <form method="POST" action="">
-      <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/ios/50/cash-in-hand.png" alt="">
-        <span><?= $lang['payments'] ?></span>
-      </div>
-    </form>
+    <div class="option inactive">
+      <img src="https://img.icons8.com/ios/50/cash-in-hand.png" alt="Payments">
+      <span><?= $lang['payments'] ?></span>
+    </div>
 
     <!-- Mixed Deposits (Inactive) -->
-    <form method="POST" action="">
-      <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/pulsar-line/100/cash.png" alt="">
-        <span><?= $lang['mixed_deposits'] ?></span>
-      </div>
-    </form>
+    <div class="option inactive">
+      <img src="https://img.icons8.com/pulsar-line/100/cash.png" alt="Mixed Deposits">
+      <span><?= $lang['mixed_deposits'] ?></span>
+    </div>
 
     <!-- Cash a Check (Inactive) -->
-    <form method="POST" action="">
-      <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/pulsar-line/100/check.png" alt="">
-        <span><?= $lang['cash_a_check'] ?></span>
-      </div>
-    </form>
+    <div class="option inactive">
+      <img src="https://img.icons8.com/pulsar-line/100/check.png" alt="Cash a Check">
+      <span><?= $lang['cash_a_check'] ?></span>
+    </div>
 
     <!-- Check Deposit With CashBack (Inactive) -->
-    <form method="POST" action="">
-      <div class="option inactive" onclick="">
-        <img src="https://img.icons8.com/wired/64/cash-in-hand.png" alt="">
-        <span><?= $lang['check_deposit_cashback'] ?></span>
-      </div>
-    </form>
+    <div class="option inactive">
+      <img src="https://img.icons8.com/wired/64/cash-in-hand.png" alt="Check Deposit With CashBack">
+      <span><?= $lang['check_deposit_cashback'] ?></span>
+    </div>
 
-    <div class="option exit-btn" onclick="transaction_cancelled()">
-      <img src="https://img.icons8.com/ios-filled/50/logout-rounded.png" alt="">
-      <span style="padding-top: 10px;"><?= $lang['exit'] ?></span>
+    <div class="option exit-btn" onclick="window.location.href='language_choice.php'">
+      <img src="https://img.icons8.com/ios-filled/50/logout-rounded.png" alt="Exit">
+      <span><?= $lang['exit'] ?></span>
     </div>
   </div>
-
-
-
-  <div id="customModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Default Title</h2>
-      <p id="modalMessage">Default message goes here.</p>
-      <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="modal.js">
-
-  </script>
 </body>
 
 </html>

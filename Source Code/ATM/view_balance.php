@@ -4,6 +4,9 @@ session_start(); // If session data is needed
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 $balance = isset($_GET['balance']) ? htmlspecialchars($_GET['balance']) : 'Unknown';
+
+// Retrieve currency from session (use a default if not set)
+$currency = isset($_SESSION['currencyType']) ? $_SESSION['currencyType'] : '£';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,9 +164,9 @@ $balance = isset($_GET['balance']) ? htmlspecialchars($_GET['balance']) : 'Unkno
     ?>
 
     <div class="balance-info">
-      <p>Available Balance: <strong>$<?php echo htmlspecialchars($balance) ?></strong></p>
-      <p>Current Balance: <strong>$2,222.22</strong></p>
-      <p>Account Balance: <strong>$3,333.33</strong></p>
+      <p>Available Balance: <strong><?php echo htmlspecialchars($currency) . htmlspecialchars($balance) ?></strong></p>
+      <p>Current Balance: <strong><?php echo htmlspecialchars($currency) ?>2,222.22</strong></p>
+      <p>Account Balance: <strong><?php echo htmlspecialchars($currency) ?>3,333.33</strong></p>
     </div>
 
     <div class="option" onclick="perform_another_transaction()">

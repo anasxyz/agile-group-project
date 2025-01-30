@@ -97,6 +97,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     const cardNumber = "<?php echo $_SESSION['card_number']; ?>";
     const expiry = "<?php echo $_SESSION['expiry']; ?>";
     const pin = "<?php echo $_SESSION['pin']; ?>";
+    const currency = "<?php echo $_SESSION['currencyType']; ?>";
 
     function handleOption(option) {
       // Show the loading modal
@@ -137,7 +138,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       .then(data => {
         console.log(data);
         if (data.status === 'Approved') {
-            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
+            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}&currency=${encodeURIComponent(currency)}`;
             window.location.href = url;
         } else {
           showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');

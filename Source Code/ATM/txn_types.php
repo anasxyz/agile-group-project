@@ -148,6 +148,18 @@ session_start(); // Start the session
       background-color:rgb(250, 157, 157);
     }
 
+    .currency-btn {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color:rgb(241, 227, 96);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .currency-btn:hover {
+      background-color:rgb(196, 183, 71);
+    }
   </style>
 </head>
 <body>
@@ -210,13 +222,18 @@ session_start(); // Start the session
       </div>
     </form>
 
+    <div class="option" onclick="redirectToCurrencyOptions()">
+      <img src="https://img.icons8.com/ios/100/currency-exchange.png" alt="">
+      <span style="padding-top: 10px;">Change Currency</span>
+    </div>
+
     <div class="option exit-btn" onclick="transaction_cancelled()">
       <img src="https://img.icons8.com/ios-filled/50/logout-rounded.png" alt="">
       <span style="padding-top: 10px;">Exit</span>
     </div>
   </div>
 
-  
+    
 
   <div id="customModal" class="modal">
     <div class="modal-content">
@@ -231,8 +248,16 @@ session_start(); // Start the session
   </div>
 
   <script src="modal.js">
+    
+  </script>
+
+  <script>
     function transaction_cancelled() {
         showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
+    }
+
+    function redirectToCurrencyOptions() {
+      window.location.href = "currency_options.php";
     }
   </script>
 </body>

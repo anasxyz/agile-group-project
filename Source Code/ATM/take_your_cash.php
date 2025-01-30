@@ -1,15 +1,19 @@
 <?php
-session_start(); // If session data is needed
+session_start();
+
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
 
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balance Summary</title>
+  <title><?= $lang['take_your_cash'] ?></title>
   <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -52,10 +56,6 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       margin-bottom: 10px;
     }
 
-    .balance-info p {
-      margin: 5px 0;
-    }
-
     .option {
       display: flex;
       align-items: center;
@@ -75,28 +75,9 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       transform: scale(1.02);
     }
 
-    .option img {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 10px;
-    }
-
     .option span {
       font-size: 1.2em;
       color: #333;
-    }
-
-    /* Inactive Button Styling */
-    .option.inactive {
-      background-color: #b0b0b0;
-      color: #7a7a7a;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .option.inactive:hover {
-      background-color: #b0b0b0;
-      transform: none;
     }
 
     .modal {
@@ -111,27 +92,13 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     .modal-content {
-      background-color: #fefefe;
+      background-color: #fff;
       margin: 15% auto;
       padding: 20px;
       border: 1px solid #888;
       width: 80%;
       text-align: center;
       border-radius: 25px;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
     }
 
     .modal-footer {
@@ -149,35 +116,67 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     .modal-button:hover {
       background-color: #ddd;
     }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Take Your Cash</h1>
+    <h1><?= $lang['take_your_cash'] ?></h1>
 
     <div class="balance-info">
       <p></p>
     </div>
 
-    <div class="option" onclick="perform_another_transaction()">
-      <span>Take Cash</span>
+    <div class="option" onclick="openModal()">
+      <span><?= $lang['take_cash'] ?></span>
     </div>
   </div>
 
   <div id="customModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Default Title</h2>
-      <p id="modalMessage">Default message goes here.</p>
+      <h2 id="modalTitle"><?= $lang['perform_another_transaction_title'] ?></h2>
+      <p id="modalMessage"><?= $lang['perform_another_transaction_message'] ?></p>
       <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
+        <button id="button1" class="modal-button" onclick="performAnotherTransaction()"><?= $lang['yes'] ?></button>
+        <button id="button2" class="modal-button" onclick="endTransaction()"><?= $lang['no'] ?></button>
       </div>
     </div>
   </div>
 
-  <script src="modal.js">
-    
+  <script>
+    function openModal() {
+      document.getElementById("customModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("customModal").style.display = "none";
+    }
+
+    function performAnotherTransaction() {
+      window.location.href = "insert_card.php";
+    }
+
+    function endTransaction() {
+      window.location.href = "take_card_out.php";
+    }
   </script>
+
+  <script src="modal.js"></script>
 </body>
+
 </html>

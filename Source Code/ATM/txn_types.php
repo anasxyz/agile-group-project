@@ -1,10 +1,13 @@
 <?php
 session_start(); // Start the session
 
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +26,8 @@ session_start(); // Start the session
 
     .container {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Create two equal columns */
+      grid-template-columns: repeat(2, 1fr);
+      /* Create two equal columns */
       gap: 20px;
       width: 600px;
       text-align: center;
@@ -34,7 +38,8 @@ session_start(); // Start the session
       font-weight: bold;
       color: #333;
       text-align: center;
-      grid-column: span 3; /* Make the title span both columns */
+      grid-column: span 3;
+      /* Make the title span both columns */
     }
 
     .option {
@@ -67,15 +72,15 @@ session_start(); // Start the session
 
     /* Inactive Button Styling */
     .option.inactive {
-        background-color: #b0b0b0;
-        color: #7a7a7a;
-        cursor: not-allowed;
-        box-shadow: none;
+      background-color: #b0b0b0;
+      color: #7a7a7a;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     .option.inactive:hover {
-        background-color: #b0b0b0;
-        transform: none;
+      background-color: #b0b0b0;
+      transform: none;
     }
 
     .modal {
@@ -132,61 +137,63 @@ session_start(); // Start the session
     .exit-btn-container {
       display: flex;
       justify-content: center;
-      margin-top: 20px; /* Add some space below the grid */
+      margin-top: 20px;
+      /* Add some space below the grid */
     }
 
     .exit-btn {
       padding: 10px 20px;
       font-size: 1.2em;
-      background-color:rgb(243, 187, 183);
+      background-color: rgb(243, 187, 183);
       color: white;
       border: none;
       cursor: pointer;
     }
 
     .exit-btn:hover {
-      background-color:rgb(250, 157, 157);
+      background-color: rgb(250, 157, 157);
     }
 
     .currency-btn {
       padding: 10px 20px;
       font-size: 1.2em;
-      background-color:rgb(241, 227, 96);
+      background-color: rgb(241, 227, 96);
       color: white;
       border: none;
       cursor: pointer;
     }
 
     .currency-btn:hover {
-      background-color:rgb(196, 183, 71);
+      background-color: rgb(196, 183, 71);
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Select a Transaction</h1>
+    <h1><?= $lang['select_transaction'] ?></h1>
 
     <!-- Balance Inquiry -->
     <form id="redirectForm" method="POST" action="balance_options.php">
       <div class="option" onclick="redirect()">
         <img src="https://img.icons8.com/ios/50/sales-performance-balance.png" alt="Balance Inquiry">
-        <span>Balance Inquiry</span>
+        <span><?= $lang['balance_inquiry'] ?></span>
       </div>
     </form>
 
     <!-- Cash Withdrawal -->
     <form id="redirectForm" method="POST" action="withdrawal_options.php">
       <div class="option" onclick="showModal('Acknowledgement', 'You may be charged a fee for this transaction. Do you wish to continue?', 'Decline', 'Accept', 'closeModal()', 'redirectWithdrawal()')">
-      <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
-        <span>Cash Withdrawal</span>
+        <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
+        <span><?= $lang['cash_withdrawal'] ?></span>
       </div>
     </form>
 
     <!-- Deposits (Inactive) -->
     <form method="POST" action="">
       <div class="option inactive" onclick="">
-      <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
-        <span>Deposits</span>
+        <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
+        <span><?= $lang['deposits'] ?></span>
       </div>
     </form>
 
@@ -194,7 +201,7 @@ session_start(); // Start the session
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/ios/50/cash-in-hand.png" alt="">
-        <span>Payments</span>
+        <span><?= $lang['payments'] ?></span>
       </div>
     </form>
 
@@ -202,7 +209,7 @@ session_start(); // Start the session
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/pulsar-line/100/cash.png" alt="">
-        <span>Mixed Deposits</span>
+        <span><?= $lang['mixed_deposits'] ?></span>
       </div>
     </form>
 
@@ -210,7 +217,7 @@ session_start(); // Start the session
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/pulsar-line/100/check.png" alt="">
-        <span>Cash a Check</span>
+        <span><?= $lang['cash_a_check'] ?></span>
       </div>
     </form>
 
@@ -218,22 +225,21 @@ session_start(); // Start the session
     <form method="POST" action="">
       <div class="option inactive" onclick="">
         <img src="https://img.icons8.com/wired/64/cash-in-hand.png" alt="">
-        <span>Check Deposit With CashBack</span>
+        <span><?= $lang['check_deposit_cashback'] ?></span>
       </div>
     </form>
 
     <div class="option" onclick="redirectToCurrencyOptions()">
       <img src="https://img.icons8.com/ios/100/currency-exchange.png" alt="">
-      <span style="padding-top: 10px;">Change Currency</span>
+      <span style="padding-top: 10px;"><?= $lang['change_currency'] ?></span>
     </div>
 
     <div class="option exit-btn" onclick="transaction_cancelled()">
       <img src="https://img.icons8.com/ios-filled/50/logout-rounded.png" alt="">
-      <span style="padding-top: 10px;">Exit</span>
+      <span><?= $lang['exit'] ?></span>
     </div>
   </div>
 
-    
 
   <div id="customModal" class="modal">
     <div class="modal-content">
@@ -248,12 +254,12 @@ session_start(); // Start the session
   </div>
 
   <script src="modal.js">
-    
+
   </script>
 
   <script>
     function transaction_cancelled() {
-        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
+      showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
 
     function redirectToCurrencyOptions() {
@@ -261,4 +267,5 @@ session_start(); // Start the session
     }
   </script>
 </body>
+
 </html>

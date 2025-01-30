@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
+
+
 // Clear all session values related to card information
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
@@ -8,7 +13,7 @@ unset($_SESSION['pin']);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -49,23 +54,23 @@ unset($_SESSION['pin']);
             padding: 20px;
             box-sizing: border-box;
             transition: transform 1s ease-in-out;
-            background-image: url("map.png"); 
-            background-size: contain; 
-            background-repeat: no-repeat; 
-            background-position: center; 
+            background-image: url("map.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
         .card-container .chip {
             width: 60px;
-            height: 45px; 
-            background-color: transparent; 
+            height: 45px;
+            background-color: transparent;
             border-radius: 10px;
             margin-top: 25px;
             margin-left: 10px;
-            background-image: url("chip2.png"); /
-            background-size: contain; 
+            background-image: url("chip2.png");
+            background-size: contain;
             background-repeat: no-repeat;
-            background-position: center; 
+            background-position: center;
         }
 
         /* .card-container .card-number {
@@ -79,28 +84,28 @@ unset($_SESSION['pin']);
         } */
 
         .card-container .card-number {
-            font-family: 'Credit Card', monospace; 
-            font-size: 1rem; 
+            font-family: 'Credit Card', monospace;
+            font-size: 1rem;
             letter-spacing: 3px;
             margin: 20px 0;
             display: flex;
             justify-content: space-between;
             padding: 10px;
-            color:rgb(160, 160, 160);
-            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); 
+            color: rgb(160, 160, 160);
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5);
         }
 
         .date {
             font-family: 'Credit Card', monospace;
-            font-size: 10px; 
-            letter-spacing: 3px; 
+            font-size: 10px;
+            letter-spacing: 3px;
             margin: 20px 0;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             padding: 10px;
-            color:rgb(160, 160, 160); 
-            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5); 
+            color: rgb(160, 160, 160);
+            text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.5);
         }
 
         .card-number span {
@@ -327,7 +332,7 @@ unset($_SESSION['pin']);
 
         <!-- PIN Entry Section -->
         <div class="pin-screen">
-            <h1>Enter PIN</h1>
+            <h1><?= $lang['enter_pin'] ?></h1>
             <input type="password" class="pin-value" readonly>
             <div class="pin-keyboard">
                 <button class="pin-keyboard-key">1</button>
@@ -339,22 +344,22 @@ unset($_SESSION['pin']);
                 <button class="pin-keyboard-key">7</button>
                 <button class="pin-keyboard-key">8</button>
                 <button class="pin-keyboard-key">9</button>
-                <button class="pin-keyboard-key pin-keyboard-key--clear">Exit</button>
+                <button class="pin-keyboard-key pin-keyboard-key--clear"><?= $lang['exit'] ?></button>
                 <button class="pin-keyboard-key">0</button>
-                <button class="pin-keyboard-key pin-keyboard-key--enter">Enter</button>
+                <button class="pin-keyboard-key pin-keyboard-key--enter"><?= $lang['enter'] ?></button>
             </div>
         </div>
     </div>
 
     <div id="customModal" class="modal">
         <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle">Default Title</h2>
-        <p id="modalMessage">Default message goes here.</p>
-        <div class="modal-footer">
-            <button id="button1" class="modal-button" onclick="">Button 1</button>
-            <button id="button2" class="modal-button" onclick="">Button 2</button>
-        </div>
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Default Title</h2>
+            <p id="modalMessage">Default message goes here.</p>
+            <div class="modal-footer">
+                <button id="button1" class="modal-button" onclick="">Button 1</button>
+                <button id="button2" class="modal-button" onclick="">Button 2</button>
+            </div>
         </div>
     </div>
 
@@ -424,52 +429,52 @@ unset($_SESSION['pin']);
             };
 
             fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(transaction_data).toString()
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.status === 'Approved') {
-                    const url = `save_card_data.php?card_number=${encodeURIComponent(card_number)}&expiry=${encodeURIComponent(expiry_date)}&pin=${encodeURIComponent(pin)}`;
-                    window.location.href = url;
-                } else {
-                    showModal('Declined', data.message, 'Close', 'Take Card Out', 'closeModal()', 'redirectCardOut()');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showModal('Error', 'There was an error processing your request.', 'Close', '', 'closeModal()', '');
-            });
-            }
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(transaction_data).toString()
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 'Approved') {
+                        const url = `save_card_data.php?card_number=${encodeURIComponent(card_number)}&expiry=${encodeURIComponent(expiry_date)}&pin=${encodeURIComponent(pin)}`;
+                        window.location.href = url;
+                    } else {
+                        showModal('Declined', data.message, 'Close', 'Take Card Out', 'closeModal()', 'redirectCardOut()');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showModal('Error', 'There was an error processing your request.', 'Close', '', 'closeModal()', '');
+                });
+        }
 
-            function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-                document.getElementById('modalTitle').textContent = title;
-                document.getElementById('modalMessage').textContent = message;
-                document.getElementById('button1').textContent = button1Text;
-                document.getElementById('button2').textContent = button2Text;
+        function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('button1').textContent = button1Text;
+            document.getElementById('button2').textContent = button2Text;
 
-                document.getElementById('button1').setAttribute('onclick', button1Action);
-                document.getElementById('button2').setAttribute('onclick', button2Action);
+            document.getElementById('button1').setAttribute('onclick', button1Action);
+            document.getElementById('button2').setAttribute('onclick', button2Action);
 
-                document.getElementById('customModal').style.display = 'block';
-                }
+            document.getElementById('customModal').style.display = 'block';
+        }
 
-            function closeModal() {
-                document.getElementById('customModal').style.display = 'none';
-            }
+        function closeModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
 
 
-            function redirectCardOut() {
-                window.location.href = 'take_card_out.php';
-            }
+        function redirectCardOut() {
+            window.location.href = 'take_card_out.php';
+        }
 
-            function transaction_cancelled() {
-                showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Okay", "", "redirectCardOut()", "");
-            }
+        function transaction_cancelled() {
+            showModal("Transaction Cancelled", 'Your transaction has been cancelled', "Okay", "", "redirectCardOut()", "");
+        }
     </script>
 </body>
 

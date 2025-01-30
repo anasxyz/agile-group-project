@@ -1,5 +1,13 @@
+<?php
+session_start();
+
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,28 +79,46 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <div class="option" onclick="perform_another_transaction()">
-      <span style="padding-bottom: 20px;">Take Your Receipt</span>
-      <img src="https://img.icons8.com/pulsar-line/100/receipt.png" alt="receipt"/>
+    <div class="option" onclick="openModal()">
+      <span style="padding-bottom: 20px;"><?= $lang['take_your_receipt'] ?></span>
+      <img src="https://img.icons8.com/pulsar-line/100/receipt.png" alt="receipt" />
     </div>
   </div>
 
   <div id="customModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Default Title</h2>
-      <p id="modalMessage">Default message goes here.</p>
+      <h2 id="modalTitle"><?= $lang['perform_another_transaction_title'] ?></h2>
+      <p id="modalMessage"><?= $lang['perform_another_transaction_message'] ?></p>
       <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
+        <button id="button1" class="modal-button" onclick="performAnotherTransaction()"><?= $lang['yes'] ?></button>
+        <button id="button2" class="modal-button" onclick="endTransaction()"><?= $lang['no'] ?></button>
       </div>
     </div>
   </div>
 
-  <script src="modal.js">
-    
+  <script>
+    function openModal() {
+      document.getElementById("customModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("customModal").style.display = "none";
+    }
+
+    function performAnotherTransaction() {
+      window.location.href = "insert_card.php";
+    }
+
+    function endTransaction() {
+      window.location.href = "take_card_out.php";
+    }
   </script>
+
+  <script src="modal.js"></script>
 </body>
+
 </html>

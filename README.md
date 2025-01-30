@@ -15,6 +15,6 @@
 
 **Sprint 1 Backlog:** Github Project Board (https://github.com/users/anasxyz/projects/5/views/1?sortedBy%5Bdirection%5D=asc&sortedBy%5BcolumnId%5D=Status)
 
-**Sprint 2 Backlog:** Github Project Board (https://github.com/users/anasxyz/projects/6/views/1?visibleFields=%5B%22Title%22%2C%22Assignees%22%2C%22Status%22%2C%22Labels%22%2C%22Sub-issues+progress%22%2C164783502%5D&sortedBy%5Bdirection%5D=asc&sortedBy%5BcolumnId%5D=Status)
+**Sprint 2 Backlog:** Github Project Board (https://github.com/users/anasxyz/projects/6/views/1?visibleFields=%5B%22Title%22%2C%22Assignees%22%2C%22Status%22%2C%22Labels%22%2C%22Sub-issues+progress%22%2C%22Parent+issue%22%5D)
 
 **Link to video of Scrum meeting**: https://youtu.be/-apBKkNncuY

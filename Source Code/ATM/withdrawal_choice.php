@@ -1,20 +1,24 @@
 <?php
 session_start(); // If session data is needed
 
+$language = $_SESSION['language'] ?? 'en';
+$lang = include "../languages/{$language}.php";
+
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['currencyType']) : 'Unknown';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal Choice</title>
-    <link rel="stylesheet" href="styles.css">
+<html lang="<?= $language ?>">
 
-    <style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdrawal Choice</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
     /* Modal Styles */
     .modal {
       display: none;
@@ -48,14 +52,20 @@ $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['curre
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Fast Cash</h1>
+    <h1><?= $lang['fast_cash'] ?></h1>
 
     <div class="option" onclick="handleOption('10')">
       <span><?php echo htmlspecialchars($currency) ?>10</span>
@@ -70,15 +80,15 @@ $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['curre
     </div>
 
     <div class="option" onclick="handleOption('Other Amount')">
-      <span>Other Amount</span>
+      <span><?= $lang['other_amount'] ?></span>
     </div>
 
     <div class="option" onclick="transaction_cancelled()">
-      <span>Exit</span>
+      <span><?= $lang['exit'] ?></span>
     </div>
 
     <div class="option" onclick="backTo('txn_types')">
-      <span>Main Menu</span>
+      <span><?= $lang['main_menu'] ?></span>
     </div>
   </div>
 
@@ -91,20 +101,16 @@ $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['curre
     function handleOption(option) {
       // Redirect to the appropriate page
       if (option === '10') {
-          window.location.href = `do_you_want_receipt.php?amount=${encodeURIComponent('10')}`;
-        } 
-        else if (option === '20') {
-          window.location.href = `do_you_want_receipt.php?amount=${encodeURIComponent('20')}`;
-        } 
-        else if (option === '50') {
-          window.location.href = `do_you_want_receipt.php?amount=${encodeURIComponent('50')}`;
-        } 
-        else if (option === 'Other Amount') {
-            window.location.href = 'custom_amount.php';
-        } 
-        else{
-          window.location.href = 'print_receipt.php';
-        }
+        window.location.href = `do_you_want_receipt.php?amount=${encodeURIComponent('10')}`;
+      } else if (option === '20') {
+        window.location.href = `do_you_want_receipt.php?amount=${encodeURIComponent('20')}`;
+      } else if (option === '50') {
+        window.location.href = `do_you_want_receipt.php?amount=${encodeURIComponent('50')}`;
+      } else if (option === 'Other Amount') {
+        window.location.href = 'custom_amount.php';
+      } else {
+        window.location.href = 'print_receipt.php';
+      }
     }
 
     function take_out_card() {
@@ -116,7 +122,7 @@ $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['curre
     }
 
     function transaction_cancelled() {
-        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
+      showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
 
     function backTo(page) {
@@ -124,5 +130,5 @@ $currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['curre
     }
   </script>
 </body>
-    
+
 </html>

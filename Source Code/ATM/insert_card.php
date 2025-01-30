@@ -1,9 +1,7 @@
 <?php
 session_start();
 
-$_SESSION['language'] = 'es';
 $language = $_SESSION['language'] ?? 'en';
-
 $lang = include "../languages/{$language}.php";
 
 // Clear all session values related to card information
@@ -315,7 +313,7 @@ unset($_SESSION['pin']);
                 <button class="pin-keyboard-key">7</button>
                 <button class="pin-keyboard-key">8</button>
                 <button class="pin-keyboard-key">9</button>
-                <button class="pin-keyboard-key pin-keyboard-key--clear"><?= $lang['enter'] ?></button>
+                <button class="pin-keyboard-key pin-keyboard-key--clear"><?= $lang['exit'] ?></button>
                 <button class="pin-keyboard-key">0</button>
                 <button class="pin-keyboard-key pin-keyboard-key--enter"><?= $lang['enter'] ?></button>
             </div>

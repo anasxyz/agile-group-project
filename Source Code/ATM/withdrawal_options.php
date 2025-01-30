@@ -1,9 +1,7 @@
 <?php
-session_start(); // Ensure session is started to use session variables
+session_start();
 
-$_SESSION['language'] = 'es';
 $language = $_SESSION['language'] ?? 'en';
-
 $lang = include "../languages/{$language}.php";
 ?>
 

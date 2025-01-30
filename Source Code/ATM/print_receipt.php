@@ -1,12 +1,12 @@
 <?php
-$_SESSION['language'] = 'es';
-$language = $_SESSION['language'] ?? 'en';
+session_start(); // If session data is needed
 
+$language = $_SESSION['language'] ?? 'en';
 $lang = include "../languages/{$language}.php";
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $language ?>">
 
 <head>
   <meta charset="UTF-8">

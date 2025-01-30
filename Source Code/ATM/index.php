@@ -1,12 +1,12 @@
 <?php
+session_start(); // If session data is needed
+
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
 
 
-$_SESSION['language'] = 'es';
 $language = $_SESSION['language'] ?? 'en';
-
 $lang = include "../languages/{$language}.php";
 ?>
 

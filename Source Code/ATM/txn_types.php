@@ -231,7 +231,9 @@ session_start(); // Start the session
   </div>
 
   <script src="modal.js">
-    
+    function transaction_cancelled() {
+        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
+    }
   </script>
 </body>
 </html>

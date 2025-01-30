@@ -159,8 +159,8 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       <p></p>
     </div>
 
-    <div class="option" onclick="redirectIndex()">
-      <span>Done</span>
+    <div class="option" onclick="perform_another_transaction()">
+      <span>Take Cash</span>
     </div>
   </div>
 

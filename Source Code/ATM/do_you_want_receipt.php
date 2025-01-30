@@ -156,7 +156,7 @@ $amount = isset($_GET['amount']) ? htmlspecialchars($_GET['amount']) : 'Unknown'
       .then(data => {
         console.log(data);
         if (data.status === 'Approved') {
-            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
+            const url = `take_your_cash.php`;
             window.location.href = url;
         } else {
           showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');

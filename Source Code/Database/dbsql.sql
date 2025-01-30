@@ -23,6 +23,8 @@ CREATE TABLE `NetworkSimulatorLogs` (
   `SwitchId` INT AUTO_INCREMENT PRIMARY KEY, 
   `CardNumber` CHAR(16) NOT NULL,       
   `TransactionId` CHAR(16) NOT NULL,
+  `TransactionType` CHAR(16) NOT NULL,
+  `Status` CHAR(16) NOT NULL,
   `Date` DATE DEFAULT NULL,                      
   `Balance` DECIMAL(15, 2) DEFAULT NULL,       
   FOREIGN KEY (`CardNumber`) REFERENCES `Accounts`(`CardNumber`),

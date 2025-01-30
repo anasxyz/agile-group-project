@@ -71,6 +71,10 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     <div class="option" onclick="handleOption('Other Amount')">
       <span>Other Amount</span>
     </div>
+
+    <div class="option" onclick="backTo('withdrawal_options')">
+      <span>Back</span>
+    </div>
   </div>
 
   <script>
@@ -100,6 +104,10 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
     function take_out_card() {
       window.location.href = 'take_card_out.php'
+    }
+
+    function backTo(page) {
+      window.location.href = page.endsWith(".php") ? page : page + ".php";
     }
   </script>
 </body>

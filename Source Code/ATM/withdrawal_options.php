@@ -31,9 +31,12 @@ session_start(); // Ensure session is started to use session variables
       <span>Loan</span>
     </div>
 
-    <div class="option" onclick="backTo('txn_types')">
-      <span>Back</span>
+    <div class="option" onclick="transaction_cancelled()">
+      <span>Exit</span>
     </div>
+
+    <div class="option" onclick="backTo('txn_types')">
+      <span>Main Menu</span>
   </div>
 
   <div id="customModal" class="modal">
@@ -55,6 +58,14 @@ session_start(); // Ensure session is started to use session variables
   <script>
     function backTo(page) {
       window.location.href = page.endsWith(".php") ? page : page + ".php";
+    }
+
+    function take_out_card() {
+      window.location.href = 'take_card_out.php'
+    }
+
+    function transaction_cancelled() {
+        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
   </script>
 </body>

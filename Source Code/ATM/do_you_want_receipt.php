@@ -3,15 +3,18 @@ session_start(); // If session data is needed
 
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
+$amount = isset($_GET['amount']) ? htmlspecialchars($_GET['amount']) : 'Unknown';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balance Choice</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Choice</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
     /* Modal Styles */
     .modal {
       display: none;
@@ -52,22 +55,23 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 </head>
 <body>
   <div class="container">
-    <h1>How would you like your Balance?</h1>
+    <h1>Do you want a Receipt?</h1>
 
-    <div class="option" onclick="handleOption('view')">
-      <span>View Balance</span>
+    <div class="option" onclick="handleOption('no')">
+      <span>No</span>
     </div>
 
-    <div class="option" onclick="handleOption('print')">
-      <span>Print Balance</span>
+    <div class="option" onclick="handleOption('yes')">
+      <span>Yes</span>
     </div>
 
-    <div class="option" onclick="transaction_cancelled()">
-      <span>Exit</span>
+    <div class="option" onclick="handleOption('exit')">
+      <span>EXIT</span>
     </div>
 
-    <div class="option" onclick="backTo('txn_types')">
-      <span>Main Menu</span>
+    <div class="option" onclick="handleOption('main menu')">
+      <span>MAIN MENU</span>
+    </div>
   </div>
 
   <!-- Modal -->
@@ -96,7 +100,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     const cardNumber = "<?php echo $_SESSION['card_number']; ?>";
     const expiry = "<?php echo $_SESSION['expiry']; ?>";
     const pin = "<?php echo $_SESSION['pin']; ?>";
-    const currency = "<?php echo $_SESSION['currencyType']; ?>";
+    const amount = "<?php echo $amount ?>";
 
     function handleOption(option) {
       // Show the loading modal
@@ -108,22 +112,37 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         modal.style.display = 'none';
 
         // Redirect to the appropriate page
-        if (option === 'view') {
-          sendTransactionData(cardNumber, expiry, pin, 'balance inquiry');
-        } else if (option === 'print') {
+        if (option === 'no') {
+          sendTransactionData(cardNumber, expiry, pin, 'withdrawal', amount);
+        } 
+        else if (option === 'yes') {
+          sendTransactionData(cardNumber, expiry, pin, 'withdrawal', amount);
+        } 
+        else if (option === 'exit') {
+          transaction_cancelled();
+        } 
+        else if (option === 'main menu') {
+            window.location.href = 'txn_types.php';
+        } 
+        else{
           window.location.href = 'print_receipt.php';
         }
       }, 2000); // 5000ms = 5 seconds
     }
 
-    function sendTransactionData(card_number, expiry_date, pin, transaction_type) {
+    function transaction_cancelled() {
+        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
+    }
+
+    function sendTransactionData(card_number, expiry_date, pin, transaction_type, withdrawal_amount, receipt) {
       const transaction_data = {
         'card_number': card_number,
         'expiry_date': expiry_date,
         'atm_id': 'ATM001',
         'transaction_id': 'txn_' + Math.random().toString(36).substr(2, 9),
         'pin': pin,
-        'transaction_type': transaction_type
+        'transaction_type': transaction_type,
+        'withdrawal_amount': withdrawal_amount
       };
 
       fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
@@ -137,7 +156,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       .then(data => {
         console.log(data);
         if (data.status === 'Approved') {
-            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}&currency=${encodeURIComponent(currency)}`;
+            const url = `take_your_cash.php`;
             window.location.href = url;
         } else {
           showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
@@ -169,14 +188,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     function take_out_card() {
       window.location.href = 'take_card_out.php'
     }
-
-    function backTo(page) {
-      window.location.href = page.endsWith(".php") ? page : page + ".php";
-    }
-
-    function transaction_cancelled() {
-        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
-    }
   </script>
 </body>
+    
 </html>

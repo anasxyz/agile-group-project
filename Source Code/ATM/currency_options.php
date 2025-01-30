@@ -1,5 +1,6 @@
 <?php
 session_start(); // Ensure session is started to use session variables
+
 ?>
 
 <!DOCTYPE html>
@@ -7,36 +8,33 @@ session_start(); // Ensure session is started to use session variables
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balance Options</title>
+  <title>Currency Options</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Balance Inquiry</h1>
-	<h3>Select an Account</h3>
+    <h1>Currency Choice</h1>
+	<h3>Select a Currency</h3>
 
-    <div class="option" onclick="redirectToBalanceChoice('checking')">
-      <span>Checking</span>
+    <div class="option" onclick="setCurrencyType('£')">
+      <span>£</span>
     </div>
 
-    <div class="option" onclick="redirectToBalanceChoice('savings')">
-      <span>Savings</span>
+    <div class="option" onclick="setCurrencyType('$')">
+      <span>$</span>
     </div>
    
-    <div class="option" onclick="redirectToBalanceChoice('credit')">
-      <span>Credit</span>
+    <div class="option" onclick="setCurrencyType('€')">
+      <span>€</span>
     </div>
   
-    <div class="option" onclick="redirectToBalanceChoice('loan')">
-      <span>Loan</span>
-    </div>
-
     <div class="option" onclick="transaction_cancelled()">
       <span>Exit</span>
     </div>
 
     <div class="option" onclick="backTo('txn_types')">
       <span>Main Menu</span>
+    </div>
   </div>
 
   <div id="customModal" class="modal">
@@ -57,12 +55,31 @@ session_start(); // Ensure session is started to use session variables
 
   <script>
     function backTo(page) {
-      window.location.href = page.endsWith(".php") ? page : page + ".php";
+        window.location.href = page.endsWith(".php") ? page : page + ".php";
     }
 
     function transaction_cancelled() {
         showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
+
+    function setCurrencyType(currencyType) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "set_currency.php?currency=" + currencyType, true);
+        xhr.send();
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                if (document.referrer) {
+                    window.location.href = document.referrer; 
+                } else {
+                    window.location.href = "insert_card.php";
+                }
+            } else {
+                alert("Error: Could not set the currency.");
+            }
+        };
+    }
+
   </script>
 </body>
 </html>

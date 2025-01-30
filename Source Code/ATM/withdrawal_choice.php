@@ -3,6 +3,7 @@ session_start(); // If session data is needed
 
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
+$currency = isset($_SESSION['currencyType']) ? htmlspecialchars($_SESSION['currencyType']) : 'Unknown';
 ?>
 
 <!DOCTYPE html>
@@ -57,23 +58,27 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     <h1>Fast Cash</h1>
 
     <div class="option" onclick="handleOption('10')">
-      <span>$10</span>
+      <span><?php echo htmlspecialchars($currency) ?>10</span>
     </div>
 
     <div class="option" onclick="handleOption('20')">
-      <span>$20</span>
+      <span><?php echo htmlspecialchars($currency) ?>20</span>
     </div>
 
     <div class="option" onclick="handleOption('50')">
-      <span>$50</span>
+      <span><?php echo htmlspecialchars($currency) ?>50</span>
     </div>
 
     <div class="option" onclick="handleOption('Other Amount')">
       <span>Other Amount</span>
     </div>
 
-    <div class="option" onclick="backTo('withdrawal_options')">
-      <span>Back</span>
+    <div class="option" onclick="transaction_cancelled()">
+      <span>Exit</span>
+    </div>
+
+    <div class="option" onclick="backTo('txn_types')">
+      <span>Main Menu</span>
     </div>
   </div>
 
@@ -104,6 +109,14 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
     function take_out_card() {
       window.location.href = 'take_card_out.php'
+    }
+
+    function backTo(page) {
+      window.location.href = page.endsWith(".php") ? page : page + ".php";
+    }
+
+    function transaction_cancelled() {
+        showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }
 
     function backTo(page) {

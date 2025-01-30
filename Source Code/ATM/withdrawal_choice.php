@@ -1,19 +1,25 @@
 <?php
 session_start(); // If session data is needed
 
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
+
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal Choice</title>
-    <link rel="stylesheet" href="styles.css">
 
-    <style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdrawal Choice</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
     /* Modal Styles */
     .modal {
       display: none;
@@ -47,14 +53,20 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Fast Cash</h1>
+    <h1><?= $lang['fast_cash'] ?></h1>
 
     <div class="option" onclick="handleOption('10')">
       <span>$10</span>
@@ -69,7 +81,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
 
     <div class="option" onclick="handleOption('Other Amount')">
-      <span>Other Amount</span>
+      <span><?= $lang['other_amount'] ?></span>
     </div>
   </div>
 
@@ -77,7 +89,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
   <div id="loadingModal" class="modal">
     <div class="modal-content">
       <div class="spinner"></div>
-      <p>Processing your request...</p>
+      <p><?= $lang['processing_request'] ?></p>
     </div>
   </div>
 
@@ -108,18 +120,14 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
         // Redirect to the appropriate page
         if (option === '10') {
-            sendWithdrawalData(10);
-        } 
-        else if (option === '20') {
-            sendWithdrawalData(20);
-        } 
-        else if (option === '50') {
-            sendWithdrawalData(50);
-        } 
-        else if (option === 'Other Amount') {
-            window.location.href = 'custom_amount.php';
-        } 
-        else{
+          sendWithdrawalData(10);
+        } else if (option === '20') {
+          sendWithdrawalData(20);
+        } else if (option === '50') {
+          sendWithdrawalData(50);
+        } else if (option === 'Other Amount') {
+          window.location.href = 'custom_amount.php';
+        } else {
           window.location.href = 'print_receipt.php';
         }
       }, 2000); // 5000ms = 5 seconds
@@ -137,44 +145,44 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       };
 
       fetch('http://localhost/../Transaction Switch/transaction_switch.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(transaction_data).toString()
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.status === 'Approved') {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(transaction_data).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.status === 'Approved') {
             const url = `take_card_out.php`;
             window.location.href = url;
-        } else {
-          showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-          
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        console.log(data);
-        showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-      });
+          } else {
+            showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          console.log(data);
+          showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+        });
     }
 
     function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
-        document.getElementById('button1').textContent = button1Text;
-        document.getElementById('button2').textContent = button2Text;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMessage').textContent = message;
+      document.getElementById('button1').textContent = button1Text;
+      document.getElementById('button2').textContent = button2Text;
 
-        document.getElementById('button1').setAttribute('onclick', button1Action);
-        document.getElementById('button2').setAttribute('onclick', button2Action);
+      document.getElementById('button1').setAttribute('onclick', button1Action);
+      document.getElementById('button2').setAttribute('onclick', button2Action);
 
-        document.getElementById('customModal').style.display = 'block';
+      document.getElementById('customModal').style.display = 'block';
     }
 
     function closeModal() {
-        document.getElementById('customModal').style.display = 'none';
+      document.getElementById('customModal').style.display = 'none';
     }
 
     function take_out_card() {
@@ -182,5 +190,5 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
   </script>
 </body>
-    
+
 </html>

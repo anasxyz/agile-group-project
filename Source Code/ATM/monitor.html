@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Transaction Monitor</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #transactions { max-width: 600px; margin: auto; }
+        .transaction { padding: 10px; border-bottom: 1px solid #ccc; background: #f9f9f9; margin-bottom: 5px; }
+        .pending { background: #ffeb3b; }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align:center;">Live Transactions</h2>
+    <div id="transactions"></div>
+
+    <script>
+        function fetchNewTransactions() {
+            $.getJSON("transactions.php", function(data) {
+                $("#transactions").empty(); // Clear and reload all pending transactions
+                
+                if (data.length > 0) {
+                    data.forEach(transaction => {
+                        let html = `<div class="transaction pending" id="txn_${transaction.transaction_id}">
+                            <strong>Transaction ID:</strong> ${transaction.transaction_id}<br>
+                            <strong>Card Number:</strong> **** **** **** ${transaction.card_number.slice(-4)}<br>
+                            <strong>Type:</strong> ${transaction.transaction_type}<br>
+                            <strong>Status:</strong> <span id="status_${transaction.transaction_id}">${transaction.status}</span><br>
+                            <strong>Message:</strong> ${transaction.message}<br>
+                            <strong>Time:</strong> ${transaction.created_at}<br>
+                            <button onclick="updateTransaction('${transaction.transaction_id}', 'Approved')">Approve</button>
+                            <button onclick="updateTransaction('${transaction.transaction_id}', 'Declined')">Decline</button>
+                        </div>`;
+                        $('#transactions').append(html);
+                    });
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log("AJAX Error:", textStatus, errorThrown);
+            });
+        }
+
+        function updateTransaction(transactionId, newStatus) {
+            $.post('update_transactions.php', { transaction_id: transactionId, status: newStatus }, function(response) {
+                if (response.success) {
+                    $(`#txn_${transactionId}`).remove(); // Remove from UI after approval/rejection
+                } else {
+                    alert("Failed to update transaction.");
+                }
+            }, 'json');
+        }
+
+        setInterval(fetchNewTransactions, 3000);
+    </script>
+
+</body>
+</html>

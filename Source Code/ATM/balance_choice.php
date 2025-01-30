@@ -1,5 +1,5 @@
 <?php
-session_start(); // If session data is needed
+session_start(); // Start session if needed
 
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
@@ -63,7 +63,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Loading Modal -->
   <div id="loadingModal" class="modal">
     <div class="modal-content">
       <div class="spinner"></div>
@@ -71,15 +71,14 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
   </div>
 
-  <!-- Modal 2 -->
+  <!-- Error/Success Modal -->
   <div id="customModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2 id="modalTitle">Default Title</h2>
       <p id="modalMessage">Default message goes here.</p>
       <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
+        <button id="button1" class="modal-button" onclick="">Close</button>
       </div>
     </div>
   </div>
@@ -90,66 +89,92 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     const expiry = "<?php echo $_SESSION['expiry']; ?>";
     const pin = "<?php echo $_SESSION['pin']; ?>";
 
+    let transactionCheckInterval;
+
     function handleOption(option) {
-      // Show the loading modal
-      const modal = document.getElementById('loadingModal');
-      modal.style.display = 'block';
+      document.getElementById('loadingModal').style.display = 'block';
 
-      // Simulate a delay of 5 seconds
       setTimeout(() => {
-        modal.style.display = 'none';
+        document.getElementById('loadingModal').style.display = 'none';
 
-        // Redirect to the appropriate page
         if (option === 'view') {
           sendTransactionData(cardNumber, expiry, pin, 'balance inquiry');
         } else if (option === 'print') {
-          window.location.href = 'print_receipt.php';
+          sendTransactionData(cardNumber, expiry, pin, 'print balance');
         }
-      }, 2000); // 5000ms = 5 seconds
+      }, 2000);
     }
 
     function sendTransactionData(card_number, expiry_date, pin, transaction_type) {
+      const transaction_id = 'txn_' + Math.random().toString(36).substr(2, 9);
+
       const transaction_data = {
-        'card_number': card_number,
-        'expiry_date': expiry_date,
-        'atm_id': 'ATM001',
-        'transaction_id': 'txn_' + Math.random().toString(36).substr(2, 9),
-        'pin': pin,
-        'transaction_type': transaction_type
+          'card_number': card_number,
+          'expiry_date': expiry_date,
+          'atm_id': 'ATM001',
+          'transaction_id': transaction_id,
+          'pin': pin,
+          'transaction_type': transaction_type
       };
 
       fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(transaction_data).toString()
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(transaction_data).toString()
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-        if (data.status === 'Approved') {
-            const url = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
-            window.location.href = url;
-        } else {
-          showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-        }
+          console.log(data);
+
+          if (data.status === 'Pending') {
+              window.currentTransactionId = transaction_id;
+              transactionCheckInterval = setInterval(() => checkTransactionStatus(window.currentTransactionId, transaction_type), 3000);
+          } else if (data.status === 'Approved' && transaction_type === 'balance inquiry') {
+              window.location.href = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
+          } else if (data.status === 'Approved' && transaction_type === 'print balance') {
+              window.location.href = 'print_receipt.php';
+          } else {
+              showModal('Transaction Declined', data.message, 'Close', 'closeModal()');
+          }
       })
       .catch(error => {
-        console.error('Error:', error);
-        console.log(data);
-        showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+          console.error('Error:', error);
+          showModal('Error', 'There was an error processing your request. Please try again later.', 'Close', 'closeModal()');
       });
     }
 
-    function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
+    function checkTransactionStatus(transaction_id, transaction_type) {
+        fetch(`http://localhost/../Transaction%20Switch/check_transaction_status.php?transaction_id=${transaction_id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Checking Status:", data);
+
+            if (data.status !== 'Pending') {
+                clearInterval(transactionCheckInterval);
+
+                if (data.status === 'Approved' && transaction_type === 'balance inquiry') {
+                    window.location.href = `view_balance.php?account_type=${encodeURIComponent(accountType)}&balance=${encodeURIComponent(data.balance)}`;
+                } else if (data.status === 'Approved' && transaction_type === 'print balance') {
+                    window.location.href = 'print_receipt.php';
+                } else {
+                    showModal('Transaction Declined', data.message, 'Close', 'redirectCardOut()');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error checking transaction status:', error);
+            showModal('Error', 'There was an error checking your transaction status. Please try again later.', 'Close', 'redirectCardOut()');
+        });
+    }
+
+    function showModal(title, message, button1Text, button1Action) {
         document.getElementById('modalTitle').textContent = title;
         document.getElementById('modalMessage').textContent = message;
         document.getElementById('button1').textContent = button1Text;
-        document.getElementById('button2').textContent = button2Text;
 
         document.getElementById('button1').setAttribute('onclick', button1Action);
-        document.getElementById('button2').setAttribute('onclick', button2Action);
 
         document.getElementById('customModal').style.display = 'block';
     }
@@ -158,8 +183,8 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         document.getElementById('customModal').style.display = 'none';
     }
 
-    function take_out_card() {
-      window.location.href = 'take_card_out.php'
+    function redirectCardOut() {
+      window.location.href = 'take_card_out.php';
     }
   </script>
 </body>

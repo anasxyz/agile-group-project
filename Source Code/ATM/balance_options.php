@@ -30,6 +30,10 @@ session_start(); // Ensure session is started to use session variables
     <div class="option" onclick="redirectToBalanceChoice('loan')">
       <span>Loan</span>
     </div>
+
+    <div class="option" onclick="backTo('txn_types')">
+      <span>Back</span>
+    </div>
   </div>
 
   <div id="customModal" class="modal">
@@ -46,6 +50,12 @@ session_start(); // Ensure session is started to use session variables
 
   <script src="modal.js">
     
+  </script>
+
+  <script>
+    function backTo(page) {
+      window.location.href = page.endsWith(".php") ? page : page + ".php";
+    }
   </script>
 </body>
 </html>

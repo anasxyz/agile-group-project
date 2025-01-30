@@ -61,6 +61,10 @@ session_start(); // Ensure session is started to use session variables
       window.location.href = page.endsWith(".php") ? page : page + ".php";
     }
 
+    function take_out_card() {
+      window.location.href = 'take_card_out.php'
+    }
+
     function transaction_cancelled() {
         showModal("Transaction Cancelled!", "Your transaction has been cancelled.", "Okay", "", "redirectCardOut()", "")
     }

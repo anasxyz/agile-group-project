@@ -1,11 +1,18 @@
 <?php
 session_start(); // If session data is needed
 
+
+$_SESSION['language'] = 'ar';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
+
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,22 +158,23 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Balance Summary</h1>
+    <h1><?= $lang['balance_summary'] ?></h1>
 
     <?php
-        echo "<h3>FROM: " . $accountType . "</h3>";
+    echo "<h3>FROM: " . $accountType . "</h3>";
     ?>
 
     <div class="balance-info">
-      <p>Available Balance: <strong>$1,111.11</strong></p>
-      <p>Current Balance: <strong>$2,222.22</strong></p>
-      <p>Account Balance: <strong>$3,333.33</strong></p>
+      <p><?= $lang['available_balance'] ?> <strong>$1,111.11</strong></p>
+      <p><?= $lang['current_balance'] ?> <strong>$2,222.22</strong></p>
+      <p><?= $lang['account_balance'] ?> <strong>$3,333.33</strong></p>
     </div>
 
     <div class="option" onclick="perform_another_transaction()">
-      <span>Done</span>
+      <span><?= $lang['done'] ?> </span>
     </div>
   </div>
 
@@ -183,7 +191,8 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
   </div>
 
   <script src="modal.js">
-    
+
   </script>
 </body>
+
 </html>

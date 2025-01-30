@@ -68,6 +68,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
     <div class="option" onclick="backTo('txn_types')">
       <span>Main Menu</span>
+    </div>
   </div>
 
   <!-- Modal -->

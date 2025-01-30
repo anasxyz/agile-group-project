@@ -1,11 +1,17 @@
 <?php
 session_start(); // If session data is needed
 
+$_SESSION['language'] = 'es';
+$language = $_SESSION['language'] ?? 'en';
+
+$lang = include "../languages/{$language}.php";
+
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,16 +157,17 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Thank you</h1>
+    <h1><?= $lang['thank_you'] ?></h1>
 
     <div class="balance-info">
-      <p>Thank you for banking with NCR Atleos Bank</p>
+      <p><?= $lang['banking_with_us'] ?></p>
     </div>
 
     <div class="option" onclick="redirectIndex()">
-      <span>Done</span>
+      <span><?= $lang['done'] ?></span>
     </div>
   </div>
 
@@ -177,7 +184,8 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
   </div>
 
   <script src="modal.js">
-    
+
   </script>
 </body>
+
 </html>

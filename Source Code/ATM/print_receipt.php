@@ -1,5 +1,5 @@
 <?php
-session_start(); // If session data is needed
+session_start();
 
 $language = $_SESSION['language'] ?? 'en';
 $lang = include "../languages/{$language}.php";
@@ -11,7 +11,7 @@ $lang = include "../languages/{$language}.php";
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Print Receipt</title>
+  <title><?= $lang['print_receipt'] ?></title>
   <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -77,12 +77,64 @@ $lang = include "../languages/{$language}.php";
       background-color: #b0b0b0;
       transform: none;
     }
+
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    .modal-footer {
+      margin-top: 20px;
+    }
+
+    .modal-button {
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px;
+      border-radius: 10px;
+    }
+
+    .modal-button:hover {
+      background-color: #ddd;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div class="option" onclick="perform_another_transaction()">
+    <div class="option" onclick="openModal()">
       <span style="padding-bottom: 20px;"><?= $lang['take_your_receipt'] ?></span>
       <img src="https://img.icons8.com/pulsar-line/100/receipt.png" alt="receipt" />
     </div>
@@ -91,18 +143,35 @@ $lang = include "../languages/{$language}.php";
   <div id="customModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Default Title</h2>
-      <p id="modalMessage">Default message goes here.</p>
+      <h2 id="modalTitle"><?= $lang['perform_another_transaction_title'] ?></h2>
+      <p id="modalMessage"><?= $lang['perform_another_transaction_message'] ?></p>
       <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
+        <button id="button1" class="modal-button" onclick="performAnotherTransaction()"><?= $lang['yes'] ?></button>
+        <button id="button2" class="modal-button" onclick="endTransaction()"><?= $lang['no'] ?></button>
       </div>
     </div>
   </div>
 
-  <script src="modal.js">
+  <script>
+    function openModal() {
+      document.getElementById("customModal").style.display = "block";
+    }
 
+    function closeModal() {
+      document.getElementById("customModal").style.display = "none";
+    }
+
+    function performAnotherTransaction() {
+      window.location.href = "insert_card.php";
+    }
+
+    function endTransaction() {
+      window.location.href = "take_card_out.php";
+    }
   </script>
+
+  <script src="modal.js"></script>
+
 </body>
 
 </html>

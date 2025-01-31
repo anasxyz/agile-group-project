@@ -1,6 +1,6 @@
 <?php
-session_start(); // Start the session
-
+$simulator = realpath(__DIR__ . '/../Network%20Simulator/simulator.txt');
+$switch = realpath(__DIR__ . '/../Transaction%20Switch/switch.txt');
 ?>
 
 <!DOCTYPE html>
@@ -19,6 +19,7 @@ session_start(); // Start the session
       align-items: center;
       height: 100vh;
       background-color: #f5f5f5;
+      position: relative; /* Allow positioning of buttons at the top right */
     }
 
     .container {
@@ -160,9 +161,50 @@ session_start(); // Start the session
     .currency-btn:hover {
       background-color:rgb(196, 183, 71);
     }
+
+    /* New Buttons for File Downloads */
+    .download-btn-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .download-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .download-btn img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
+  <div class="download-btn-container">
+      <div class="option" onclick="redirectToDownloadLogs('switch')">
+        <span>Download Transaction Switch Logs</span>
+      </div>
+      <div class="option" onclick="redirectToDownloadLogs('simulator')">
+        <span>Download Network Simulator Logs</span>
+      </div>
+  </div>
+
   <div class="container">
     <h1>Select a Transaction</h1>
 
@@ -177,7 +219,7 @@ session_start(); // Start the session
     <!-- Cash Withdrawal -->
     <form id="redirectForm" method="POST" action="withdrawal_options.php">
       <div class="option" onclick="showModal('Acknowledgement', 'You may be charged a fee for this transaction. Do you wish to continue?', 'Decline', 'Accept', 'closeModal()', 'redirectWithdrawal()')">
-      <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
+        <img src="https://img.icons8.com/pulsar-line/100/withdrawal-limit.png" alt="">
         <span>Cash Withdrawal</span>
       </div>
     </form>
@@ -185,7 +227,7 @@ session_start(); // Start the session
     <!-- Deposits (Inactive) -->
     <form method="POST" action="">
       <div class="option inactive" onclick="">
-      <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
+        <img src="https://img.icons8.com/ios-filled/50/deposit.png" alt="">
         <span>Deposits</span>
       </div>
     </form>
@@ -233,8 +275,6 @@ session_start(); // Start the session
     </div>
   </div>
 
-    
-
   <div id="customModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -247,9 +287,7 @@ session_start(); // Start the session
     </div>
   </div>
 
-  <script src="modal.js">
-    
-  </script>
+  <script src="modal.js"></script>
 
   <script>
     function transaction_cancelled() {
@@ -258,6 +296,10 @@ session_start(); // Start the session
 
     function redirectToCurrencyOptions() {
       window.location.href = "currency_options.php";
+    }
+
+    function redirectToDownloadLogs(logType) {
+      window.location.href = `download_logs.php?file=${encodeURIComponent(logType)}`;
     }
   </script>
 </body>

@@ -5,20 +5,6 @@ unset($_SESSION['pin']);
 
 $targetUrl1 = 'http://transactionswitch.us-east-1.elasticbeanstalk.com/clear_log.php';
 $targetUrl2 = 'http://networksim.us-east-1.elasticbeanstalk.com/clear_log.php';
-
-function clearFileOnRemoteServer($url) {
-    $ch = curl_init($url);
-
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30); 
-
-    $response = curl_exec($ch);
-
-    curl_close($ch);
-}
-
-clearFileOnRemoteServer($targetUrl1);
-clearFileOnRemoteServer($targetUrl2);
 ?>
 
 <!DOCTYPE html>

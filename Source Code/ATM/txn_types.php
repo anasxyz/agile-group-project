@@ -196,15 +196,6 @@ $switch = realpath(__DIR__ . '/../Transaction%20Switch/switch.txt');
   </style>
 </head>
 <body>
-  <div class="download-btn-container">
-      <div class="option" onclick="redirectToDownloadLogs('switch')">
-        <span>Download Transaction Switch Logs</span>
-      </div>
-      <div class="option" onclick="redirectToDownloadLogs('simulator')">
-        <span>Download Network Simulator Logs</span>
-      </div>
-  </div>
-
   <div class="container">
     <h1>Select a Transaction</h1>
 
@@ -296,10 +287,6 @@ $switch = realpath(__DIR__ . '/../Transaction%20Switch/switch.txt');
 
     function redirectToCurrencyOptions() {
       window.location.href = "currency_options.php";
-    }
-
-    function redirectToDownloadLogs(logType) {
-      window.location.href = `download_logs.php?file=${encodeURIComponent(logType)}`;
     }
   </script>
 </body>

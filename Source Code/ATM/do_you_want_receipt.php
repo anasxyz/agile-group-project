@@ -4,6 +4,10 @@ session_start(); // If session data is needed
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
 $amount = isset($_GET['amount']) ? htmlspecialchars($_GET['amount']) : 'Unknown';
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 ?>
 
 <!DOCTYPE html>
@@ -145,7 +149,7 @@ $amount = isset($_GET['amount']) ? htmlspecialchars($_GET['amount']) : 'Unknown'
         'withdrawal_amount': withdrawal_amount
       };
 
-      fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
+      fetch('http://transactionswitch.us-east-1.elasticbeanstalk.com/transaction_switch.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

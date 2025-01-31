@@ -1,8 +1,3 @@
-<?php
-$simulator = realpath(__DIR__ . '/../Network%20Simulator/simulator.txt');
-$switch = realpath(__DIR__ . '/../Transaction%20Switch/switch.txt');
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

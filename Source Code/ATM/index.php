@@ -14,12 +14,6 @@ function clearFileOnRemoteServer($url) {
 
     $response = curl_exec($ch);
 
-    if (curl_errno($ch)) {
-        echo "Error: " . curl_error($ch);
-    } else {
-        echo "Response from target server: " . $response . "<br>";
-    }
-
     curl_close($ch);
 }
 

@@ -3,6 +3,10 @@ session_start(); // If session data is needed
 
 // Retrieve the account type from the URL
 $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,6 +72,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
 
     <div class="option" onclick="backTo('txn_types')">
       <span>Main Menu</span>
+    </div>
   </div>
 
   <!-- Modal -->
@@ -126,7 +131,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         'transaction_type': transaction_type
       };
 
-      fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
+      fetch('http://transactionswitch.us-east-1.elasticbeanstalk.com/transaction_switch.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

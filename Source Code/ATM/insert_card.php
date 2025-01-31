@@ -5,6 +5,10 @@ session_start();
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 ?>
 
 <!DOCTYPE html>
@@ -423,7 +427,7 @@ unset($_SESSION['pin']);
                 'transaction_type': transaction_type
             };
 
-            fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
+            fetch('http://transactionswitch.us-east-1.elasticbeanstalk.com/transaction_switch.php', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

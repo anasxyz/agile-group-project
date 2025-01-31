@@ -27,13 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $firstDigit = $transaction_data['card_number'][0];
 
     if ($firstDigit >= 1 && $firstDigit <= 3) {
-        $url = 'http://localhost/../Network%20Simulator/network_simulator_1.php';
+        $url = 'http://networksim.us-east-1.elasticbeanstalk.com/network_simulator_1.php';
         $simulatorName = "Network Simulator 1";
     } elseif ($firstDigit >= 4 && $firstDigit <= 6) {
-        $url = 'http://localhost/../Network%20Simulator/network_simulator_2.php';
+        $url = 'http://networksim.us-east-1.elasticbeanstalk.com/network_simulator_2.php';
         $simulatorName = "Network Simulator 2";
     } elseif ($firstDigit >= 7 && $firstDigit <= 9) {
-        $url = 'http://localhost/../Network%20Simulator/network_simulator_3.php';
+        $url = 'http://networksim.us-east-1.elasticbeanstalk.com/network_simulator_3.php';
         $simulatorName = "Network Simulator 3";
     } else {
         echo "Invalid card number.";

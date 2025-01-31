@@ -69,12 +69,12 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
       <span>Yes</span>
     </div>
 
-    <div class="option" onclick="handleOption('exit')">
-      <span>EXIT</span>
+    <div class="option" onclick="transaction_cancelled()">
+      <span>Exit</span>
     </div>
 
-    <div class="option" onclick="handleOption('main menu')">
-      <span>MAIN MENU</span>
+    <div class="option" onclick="backTo('txn_types')">
+      <span>Main Menu</span>
     </div>
   </div>
 
@@ -191,6 +191,10 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
     function take_out_card() {
       window.location.href = 'take_card_out.php'
+    }
+
+    function backTo(page) {
+      window.location.href = page.endsWith(".php") ? page : page + ".php";
     }
   </script>
 </body>

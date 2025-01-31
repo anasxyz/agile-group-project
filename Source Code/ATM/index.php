@@ -2,6 +2,21 @@
 unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
+
+$file1 = realpath(__DIR__ . '/../Network Simulator/simulator.txt');
+$file2 = realpath(__DIR__ . '/../Transaction Switch/switch.txt');
+
+if ($file1 && file_exists($file1)) {
+    file_put_contents($file1, "");
+} else {
+    echo "File 1 not found!<br>";
+}
+
+if ($file2 && file_exists($file2)) {
+    file_put_contents($file2, "");
+} else {
+    echo "File 2 not found!<br>";
+}
 ?>
 
 <!DOCTYPE html>

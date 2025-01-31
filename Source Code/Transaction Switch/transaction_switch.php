@@ -7,15 +7,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $transaction_data = $_POST;
 
     if (isset($transaction_data['status']) && isset($transaction_data['transaction_id'])) {
-        // This means it's an update from manual approval/rejection
+        // Manual approval/rejection from monitor.html
         echo json_encode([
             'transaction_id' => $transaction_data['transaction_id'],
             'status' => $transaction_data['status'],
             'message' => $transaction_data['message'],
+            'balance' => $transaction_data['balance'],
             'source' => 'Manual approval from monitor.html'
         ]);
     } else {
-        // Process a new transaction request normally
+        // Process a new transaction request and mark as Pending
         $url = 'http://localhost/../Network%20Simulator/network_simulator_1.php';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

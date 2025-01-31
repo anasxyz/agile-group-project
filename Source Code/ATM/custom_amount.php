@@ -1,8 +1,11 @@
 <?php
-session_start(); // If session data is needed
+session_start(); // Start session to get card details
 
-// Retrieve the account type from the URL
-$accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
+// Retrieve actual card details from session
+$cardNumber = isset($_SESSION['card_number']) ? $_SESSION['card_number'] : null;
+$pin = isset($_SESSION['pin']) ? $_SESSION['pin'] : null;
+$expiryDate = isset($_SESSION['expiry_date']) ? $_SESSION['expiry_date'] : null;
+$atmId = isset($_SESSION['atm_id']) ? $_SESSION['atm_id'] : 'ATM001'; // Default ATM ID
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +93,22 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         .cancel:hover {
             background-color: #c82333;
         }
+
+        /* Loading Modal */
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #333;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -99,6 +118,7 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         <button onclick="showModal()">Submit</button>
     </div>
 
+    <!-- Confirmation Modal -->
     <div class="modal" id="confirmationModal">
         <div class="modal-content">
             <h3>Confirm Withdrawal</h3>
@@ -108,40 +128,67 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
         </div>
     </div>
 
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="spinner"></div>
+            <p>Processing your request...</p>
+        </div>
+    </div>
+
+    <!-- Receipt Confirmation Modal -->
+    <div id="receiptModal" class="modal">
+        <div class="modal-content">
+            <h2>Do you want a receipt?</h2>
+            <div class="modal-footer">
+                <button class="confirm" onclick="redirectToReceiptPage(true)">Yes</button>
+                <button class="cancel" onclick="redirectToReceiptPage(false)">No</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const accountType = "<?php echo $accountType; ?>";
+        const cardNumber = "<?php echo $cardNumber; ?>";
+        const pin = "<?php echo $pin; ?>";
+        const expiryDate = "<?php echo $expiryDate; ?>";
+        const atmId = "<?php echo $atmId; ?>";
 
         function sendWithdrawalData(withdrawal_amount) {
-            const transaction_data = {
-                'card_number': '1234123412341234',
-                'expiry_date': '12/25',
-                'atm_id': 'ATM001',
+            document.getElementById('loadingModal').style.display = 'flex';
+
+            const transactionData = {
+                'card_number': cardNumber,
+                'pin': pin,
+                'expiry_date': expiryDate,
+                'atm_id': atmId,
                 'transaction_id': `txn_${Date.now()}`, // Unique transaction ID
-                'pin': '1234',
                 'transaction_type': 'withdrawal',
                 'withdrawal_amount': withdrawal_amount
             };
 
-            fetch('http://localhost/../Transaction Switch/transaction_switch.php', {
+            fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams(transaction_data).toString()
+                body: new URLSearchParams(transactionData).toString()
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                if (data.status === 'Approved') {
-                    const url = `take_card_out.php`;
-                    window.location.href = url;
+                if (data.status === 'Pending') {
+                    setTimeout(() => checkTransactionStatus(transactionData.transaction_id), 3000);
+                } else if (data.status === 'Approved') {
+                    showReceiptModal();
                 } else {
                     alert(`Transaction Failed: ${data.message}`);
+                    document.getElementById('loadingModal').style.display = 'none';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('There was an error processing your request.');
+                document.getElementById('loadingModal').style.display = 'none';
             });
         }
 
@@ -164,6 +211,42 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
             const amount = document.getElementById('amount').value;
             closeModal();
             sendWithdrawalData(amount);
+        }
+
+        function checkTransactionStatus(transactionId) {
+            fetch(`http://localhost/../Transaction%20Switch/check_transaction_status.php?transaction_id=${transactionId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Checking status:', data);
+                if (data.status === 'Approved') {
+                    showReceiptModal();
+                } else {
+                    alert('Transaction Declined: ' + data.message);
+                    document.getElementById('loadingModal').style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error checking transaction status:', error);
+            });
+        }
+
+        function showReceiptModal() {
+            document.getElementById('loadingModal').style.display = 'none';
+            document.getElementById('receiptModal').style.display = 'flex';
+        }
+
+        function redirectToReceiptPage(wantsReceipt) {
+            document.getElementById('receiptModal').style.display = 'none';
+            document.getElementById('loadingModal').style.display = 'flex';
+
+            setTimeout(() => {
+                document.getElementById('loadingModal').style.display = 'none';
+                if (wantsReceipt) {
+                    window.location.href = 'collect_cash_receipt.php';
+                } else {
+                    window.location.href = 'collect_cash.php';
+                }
+            }, 2000);
         }
     </script>
 </body>

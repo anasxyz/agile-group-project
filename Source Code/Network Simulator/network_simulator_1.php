@@ -7,6 +7,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $transaction_data = $_POST;
+    $response = [];
 
     // Handle transaction status update (from update_transactions.php)
     if (isset($transaction_data['transaction_id']) && isset($transaction_data['status'])) {
@@ -41,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Handle regular transactions (balance inquiry, authorisation, etc.)
+    // Extract transaction details
     $card_number = $transaction_data['card_number'];
     $pin = $transaction_data['pin'];
-    $response = [];
+    $transaction_type = $transaction_data['transaction_type'];
 
-    if ($transaction_data['transaction_type'] === 'balance inquiry' || $transaction_data['transaction_type'] === 'print balance') {
+    if ($transaction_type === 'balance inquiry' || $transaction_type === 'print balance') {
         $stmt = $conn->prepare("SELECT balance FROM Accounts WHERE cardNumber = ? AND pin = ?");
         $stmt->bind_param("ss", $card_number, $pin);
         $stmt->execute();
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $response = [
                 'transaction_id' => $transaction_data['transaction_id'],
                 'status' => 'Pending',
-                'transaction_type' => $transaction_data['transaction_type'],
+                'transaction_type' => $transaction_type,
                 'balance' => $balance,
                 'message' => 'Pending by network simulator 1'
             ];
@@ -67,13 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $response = [
                 'transaction_id' => $transaction_data['transaction_id'],
                 'status' => 'Declined',
-                'transaction_type' => $transaction_data['transaction_type'],
+                'transaction_type' => $transaction_type,
                 'message' => 'Transaction declined due to incorrect PIN or account not found'
             ];
         }
 
         $stmt->close();
-    } elseif ($transaction_data['transaction_type'] === 'authorisation') {
+    } elseif ($transaction_type === 'authorisation') {
         $stmt = $conn->prepare("SELECT * FROM Accounts WHERE cardNumber = ? AND pin = ?");
         $stmt->bind_param("ss", $card_number, $pin);
         $stmt->execute();
@@ -85,14 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $response = [
                     'transaction_id' => $transaction_data['transaction_id'],
                     'status' => 'Declined',
-                    'transaction_type' => $transaction_data['transaction_type'],
+                    'transaction_type' => $transaction_type,
                     'message' => 'Transaction declined because your account is blocked'
                 ];
             } else {
                 $response = [
                     'transaction_id' => $transaction_data['transaction_id'],
                     'status' => 'Approved',
-                    'transaction_type' => $transaction_data['transaction_type'],
+                    'transaction_type' => $transaction_type,
                     'message' => 'Approved by network simulator 1'
                 ];
             }
@@ -100,15 +101,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $response = [
                 'transaction_id' => $transaction_data['transaction_id'],
                 'status' => 'Declined',
-                'transaction_type' => $transaction_data['transaction_type'],
+                'transaction_type' => $transaction_type,
                 'message' => 'Transaction declined due to incorrect PIN'
             ];
         }
     
         $stmt->close();
+    } elseif ($transaction_type === 'withdrawal') {
+        // Handle Withdrawal (Pending for Manual Approval)
+        $withdrawal_amount = $transaction_data['withdrawal_amount'];
+
+        $stmt = $conn->prepare("SELECT balance FROM Accounts WHERE cardNumber = ? AND pin = ?");
+        $stmt->bind_param("ss", $card_number, $pin);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $account = $result->fetch_assoc();
+            $balance = $account['balance'];
+
+            if ($balance >= $withdrawal_amount) {
+                // Transaction is pending for manual approval
+                $response = [
+                    'transaction_id' => $transaction_data['transaction_id'],
+                    'status' => 'Pending',
+                    'transaction_type' => $transaction_type,
+                    'withdrawal_amount' => $withdrawal_amount,
+                    'balance' => $balance,
+                    'message' => 'Pending manual approval in monitor.html'
+                ];
+            } else {
+                $response = [
+                    'transaction_id' => $transaction_data['transaction_id'],
+                    'status' => 'Declined',
+                    'transaction_type' => $transaction_type,
+                    'message' => 'Insufficient balance'
+                ];
+            }
+        } else {
+            $response = [
+                'transaction_id' => $transaction_data['transaction_id'],
+                'status' => 'Declined',
+                'transaction_type' => $transaction_type,
+                'message' => 'Incorrect PIN or account not found'
+            ];
+        }
+
+        $stmt->close();
     }
 
-    // Insert transaction record
+    // Insert transaction record into the database
     $stmt = $conn->prepare("INSERT INTO Transactions (transaction_id, card_number, transaction_type, status, message, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
     $stmt->bind_param("sssss", $transaction_data['transaction_id'], $card_number, $transaction_data['transaction_type'], $response['status'], $response['message']);
     $stmt->execute();

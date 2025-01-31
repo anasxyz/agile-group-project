@@ -1,8 +1,11 @@
 <?php
-session_start(); // If session data is needed
+session_start();
 
-// Retrieve the account type from the URL
-$accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_type']) : 'Unknown';
+// Retrieve actual card details from session
+$cardNumber = isset($_SESSION['card_number']) ? $_SESSION['card_number'] : null;
+$pin = isset($_SESSION['pin']) ? $_SESSION['pin'] : null;
+$expiryDate = isset($_SESSION['expiry_date']) ? $_SESSION['expiry_date'] : null;
+$atmId = isset($_SESSION['atm_id']) ? $_SESSION['atm_id'] : 'ATM001'; // Default ATM ID
 ?>
 
 <!DOCTYPE html>
@@ -36,10 +39,35 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       position: relative;
     }
 
+    .modal-footer {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .modal-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .modal-button.yes {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .modal-button.no {
+      background-color: #f44336;
+      color: white;
+    }
+
+    /* Loading Spinner */
     .spinner {
       border: 6px solid #f3f3f3;
-      border-radius: 50%;
       border-top: 6px solid #333;
+      border-radius: 50%;
       width: 50px;
       height: 50px;
       animation: spin 1s linear infinite;
@@ -50,30 +78,41 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-  </style>
+    </style>
 </head>
 <body>
   <div class="container">
     <h1>Fast Cash</h1>
 
-    <div class="option" onclick="handleOption('10')">
+    <div class="option" onclick="handleOption(10)">
       <span>$10</span>
     </div>
 
-    <div class="option" onclick="handleOption('20')">
+    <div class="option" onclick="handleOption(20)">
       <span>$20</span>
     </div>
 
-    <div class="option" onclick="handleOption('50')">
+    <div class="option" onclick="handleOption(50)">
       <span>$50</span>
     </div>
 
-    <div class="option" onclick="handleOption('Other Amount')">
+    <div class="option" onclick="handleOption('Other')">
       <span>Other Amount</span>
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Receipt Confirmation Modal -->
+  <div id="receiptModal" class="modal">
+    <div class="modal-content">
+      <h2>Do you want a receipt?</h2>
+      <div class="modal-footer">
+        <button class="modal-button yes" onclick="redirectToReceiptPage(true)">Yes</button>
+        <button class="modal-button no" onclick="redirectToReceiptPage(false)">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Modal -->
   <div id="loadingModal" class="modal">
     <div class="modal-content">
       <div class="spinner"></div>
@@ -81,106 +120,97 @@ $accountType = isset($_GET['account_type']) ? htmlspecialchars($_GET['account_ty
     </div>
   </div>
 
-  <!-- Modal 2 -->
-  <div id="customModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Default Title</h2>
-      <p id="modalMessage">Default message goes here.</p>
-      <div class="modal-footer">
-        <button id="button1" class="modal-button" onclick="">Button 1</button>
-        <button id="button2" class="modal-button" onclick="">Button 2</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const accountType = "<?php echo $accountType; ?>";
+    let transactionCheckInterval;
+    let currentTransactionId;
 
     function handleOption(option) {
-      // Show the loading modal
-      const modal = document.getElementById('loadingModal');
-      modal.style.display = 'block';
-
-      // Simulate a delay of 5 seconds
-      setTimeout(() => {
-        modal.style.display = 'none';
-
-        // Redirect to the appropriate page
-        if (option === '10') {
-            sendWithdrawalData(10);
-        } 
-        else if (option === '20') {
-            sendWithdrawalData(20);
-        } 
-        else if (option === '50') {
-            sendWithdrawalData(50);
-        } 
-        else if (option === 'Other Amount') {
-            window.location.href = 'custom_amount.php';
-        } 
-        else{
-          window.location.href = 'print_receipt.php';
-        }
-      }, 2000); // 5000ms = 5 seconds
+      if (option === 'Other') {
+        window.location.href = 'custom_amount.php';
+      } else {
+        sendWithdrawalData(option);
+      }
     }
 
-    function sendWithdrawalData(withdrawal_amount) {
-      const transaction_data = {
-        'card_number': '1234123412341234',
-        'expiry_date': '12/25',
-        'atm_id': 'ATM001',
-        'transaction_id': 'txn_random',
-        'pin': '1234',
+    function sendWithdrawalData(amount) {
+      document.getElementById('loadingModal').style.display = 'block';
+
+      currentTransactionId = 'txn_' + Date.now();
+      const transactionData = {
+        'card_number': "<?php echo $cardNumber; ?>",
+        'pin': "<?php echo $pin; ?>",
+        'expiry_date': "<?php echo $expiryDate; ?>",
+        'atm_id': "<?php echo $atmId; ?>",
+        'transaction_id': currentTransactionId,
         'transaction_type': 'withdrawal',
-        'withdrawal_amount': withdrawal_amount
+        'withdrawal_amount': amount
       };
 
       fetch('http://localhost/../Transaction%20Switch/transaction_switch.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(transaction_data).toString()
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(transactionData).toString()
       })
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        if (data.status === 'Approved') {
-            const url = `take_card_out.php`;
-            window.location.href = url;
+
+        if (data.status === 'Pending') {
+          transactionCheckInterval = setInterval(() => checkTransactionStatus(currentTransactionId), 3000);
+        } else if (data.status === 'Approved') {
+          showReceiptModal();
         } else {
-          showModal('Transaction Failed', data.message, 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
-          
+          alert('Transaction Failed: ' + data.message);
+          document.getElementById('loadingModal').style.display = 'none';
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        console.log(data);
-        showModal('Error', 'There was an error processing your request.', 'Close', 'Take Card Out', 'closeModal()', 'take_out_card()');
+        alert('There was an error processing your request.');
+        document.getElementById('loadingModal').style.display = 'none';
       });
     }
 
-    function showModal(title, message, button1Text, button2Text, button1Action, button2Action) {
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
-        document.getElementById('button1').textContent = button1Text;
-        document.getElementById('button2').textContent = button2Text;
+    function checkTransactionStatus(transactionId) {
+      fetch(`http://localhost/../Transaction%20Switch/check_transaction_status.php?transaction_id=${transactionId}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log("Checking Status:", data);
 
-        document.getElementById('button1').setAttribute('onclick', button1Action);
-        document.getElementById('button2').setAttribute('onclick', button2Action);
+        if (data.status !== 'Pending') {
+          clearInterval(transactionCheckInterval);
 
-        document.getElementById('customModal').style.display = 'block';
+          if (data.status === 'Approved') {
+            showReceiptModal();
+          } else {
+            alert('Transaction Declined: ' + data.message);
+            document.getElementById('loadingModal').style.display = 'none';
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error checking transaction status:', error);
+      });
     }
 
-    function closeModal() {
-        document.getElementById('customModal').style.display = 'none';
+    function showReceiptModal() {
+      document.getElementById('loadingModal').style.display = 'none';
+      document.getElementById('receiptModal').style.display = 'block';
     }
 
-    function take_out_card() {
-      window.location.href = 'take_card_out.php'
+    function redirectToReceiptPage(wantsReceipt) {
+      document.getElementById('receiptModal').style.display = 'none';
+      document.getElementById('loadingModal').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('loadingModal').style.display = 'none';
+        if (wantsReceipt) {
+          window.location.href = 'collect_cash_receipt.php';
+        } else {
+          window.location.href = 'collect_cash.php';
+        }
+      }, 2000);
     }
   </script>
 </body>
-    
 </html>

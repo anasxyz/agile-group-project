@@ -3,6 +3,28 @@ unset($_SESSION['card_number']);
 unset($_SESSION['expiry']);
 unset($_SESSION['pin']);
 
+$targetUrl1 = 'http://transactionswitch.us-east-1.elasticbeanstalk.com/clear_log.php';
+$targetUrl2 = 'http://networksim.us-east-1.elasticbeanstalk.com/clear_log.php';
+
+function clearFileOnRemoteServer($url) {
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30); 
+
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo "Error: " . curl_error($ch);
+    } else {
+        echo "Response from target server: " . $response . "<br>";
+    }
+
+    curl_close($ch);
+}
+
+clearFileOnRemoteServer($targetUrl1);
+clearFileOnRemoteServer($targetUrl2);
 ?>
 
 <!DOCTYPE html>

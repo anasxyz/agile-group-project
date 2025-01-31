@@ -24,7 +24,7 @@ function sendTransactionData(transaction_type) {
     transaction_type: transaction_type
   };
 
-  fetch('http://localhost/transaction_switch.php', {
+  fetch('http://transactionswitch.us-east-1.elasticbeanstalk.com/transaction_switch.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -88,4 +88,6 @@ function redirectIndex() {
 function redirectToCustomAmountPage() {
   window.location.href = 'custom_amount.php';
 }
+
+
 

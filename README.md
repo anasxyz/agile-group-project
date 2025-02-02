@@ -25,4 +25,4 @@
 
 **Link to new video of Scrum meeting**: https://youtu.be/-apBKkNncuY
 
-**Sprint Retrospective**: https://dmail-my.sharepoint.com/:w:/g/personal/2505749_dundee_ac_uk/Ebcp1gCYVCFOgfO6n_4I518BXcSnrbzE7vi43tNZtwIJKQ?e=OXCOpF
+**Sprint Retrospective**: https://github.com/anasxyz/agile-group-project/blob/main/Sprint%20Retrospective.pdf
